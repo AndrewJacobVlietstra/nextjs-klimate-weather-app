@@ -1,9 +1,9 @@
-import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
 	return (
-		<main className="bg-gray-800 text-white w-screen h-screen">
-			<Navbar />
+		<main className="bg-zinc-500 text-white w-screen h-screen">
+			<Button>Subscribe!</Button>
 		</main>
 	);
 }
