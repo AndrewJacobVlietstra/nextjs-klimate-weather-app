@@ -9,13 +9,9 @@ export default function WeatherCard() {
 		queryFn: async () => await getCurrentWeatherData(),
 	});
 
+	console.log(data);
+
 	if (isLoading) return <div>Loading...</div>;
 
-	return (
-		<div>
-			<p>{data?.name}</p>
-			<p>{data?.sys.country}</p>
-			<p>{data?.main.feels_like}</p>
-		</div>
-	);
+	return <div>Weather Card</div>;
 }

@@ -78,5 +78,5 @@ export type Reverse_Geo_API_Response = {
 	lat: number;
 	lon: number;
 	name: string;
-	state: string;
+	state?: string;
 }[];

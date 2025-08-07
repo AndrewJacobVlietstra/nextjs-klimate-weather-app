@@ -1,6 +1,6 @@
 import WeatherCard from "@/components/WeatherCard";
 
-export default function HomePage() {
+export default async function HomePage() {
 	return (
 		<div className="">
 			<WeatherCard />
