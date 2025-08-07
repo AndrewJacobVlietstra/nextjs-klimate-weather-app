@@ -1,31 +1,17 @@
-"use client";
-
-import { useTheme } from "next-themes";
-import { ModeToggle } from "./ModeToggle";
-import Image from "next/image";
-import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 
 export default function Header() {
-	const { theme } = useTheme();
-
 	return (
-		<header className="py-4 px-6">
+		<header className="sticky top-0 z-50 w-full py-4 px-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<ul className="flex items-center justify-between">
 				<li>
-					<Link href={"/"}>
-						<Image
-							className="hover:brightness-125 transition-all"
-							src={theme === "light" ? "/logo2.png" : "/logo.png"}
-							alt="Klimate logo"
-							width={65}
-							height={65}
-						/>
-					</Link>
+					<Logo />
 				</li>
 
 				<li className="flex items-center gap-x-6">
 					<p>Search Bar</p>
-					<ModeToggle />
+					<ThemeToggle />
 				</li>
 			</ul>
 		</header>
