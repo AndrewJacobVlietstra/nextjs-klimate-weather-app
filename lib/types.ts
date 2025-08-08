@@ -1,5 +1,16 @@
 export type WeatherData = "current" | "forecast" | "reverseGeo";
 
+export type Coordinates = {
+	lat: number;
+	lon: number;
+};
+
+export type GeolocationState = {
+	coordinates: Coordinates | null;
+	error: string | null;
+	isLoading: boolean;
+};
+
 export type Current_Weather_API_Response = {
 	base: string;
 	clouds: { all: number };

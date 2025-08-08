@@ -13,5 +13,5 @@ export default function WeatherCard() {
 
 	if (isLoading) return <div>Loading...</div>;
 
-	return <div>Weather Card</div>;
+	return <div>Weathercard</div>;
 }
