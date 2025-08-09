@@ -1,5 +1,6 @@
 "use client";
 
+import CurrentWeather from "@/components/CurrentWeather";
 import CustomAlert from "@/components/CustomAlert";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import RefreshButton from "@/components/RefreshButton";
@@ -87,13 +88,12 @@ export default function DashboardPage() {
 		locationQuery.isFetching;
 
 	const [location] = locationQuery.data;
-	const locationName = `${location?.name}, ${location?.state}`;
 
 	return (
 		<div className="space-y-4">
 			{/* Favourite Cities */}
 			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-bold tracking-tight">{locationName}</h1>
+				<h1 className="text-xl font-bold tracking-tight">My Location</h1>
 				<RefreshButton
 					buttonClassName={"p-5"}
 					clickHandler={handleRefresh}
@@ -102,8 +102,16 @@ export default function DashboardPage() {
 				/>
 			</div>
 
-			<div className="text-4xl font-bold italic">
-				{Math.floor(weatherQuery.data.main.temp)} C <sup>o</sup>
+			<div className="grid gap-6">
+				<div>
+					<CurrentWeather data={weatherQuery.data} location={location} />
+					<p>Hourly temps</p>
+				</div>
+
+				<div>
+					<p>Details</p>
+					<p>Forecast</p>
+				</div>
 			</div>
 		</div>
 	);
