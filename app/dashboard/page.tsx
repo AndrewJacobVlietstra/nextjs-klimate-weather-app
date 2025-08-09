@@ -3,6 +3,7 @@
 import CurrentWeather from "@/components/CurrentWeather";
 import CustomAlert from "@/components/CustomAlert";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
+import HourlyTemperature from "@/components/HourlyTemperature";
 import RefreshButton from "@/components/RefreshButton";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
@@ -103,9 +104,9 @@ export default function DashboardPage() {
 			</div>
 
 			<div className="grid gap-6">
-				<div>
+				<div className="flex flex-col lg:flex-row gap-4">
 					<CurrentWeather data={weatherQuery.data} location={location} />
-					<p>Hourly temps</p>
+					<HourlyTemperature data={forecastQuery.data} />
 				</div>
 
 				<div>

@@ -15,9 +15,7 @@ export default function CustomCard({
 }: CustomCardProps) {
 	return (
 		<Card className={cn("overflow-hidden", cardClassName)}>
-			<CardContent className={cn("p-6", contentClassName)}>
-				{children}
-			</CardContent>
+			<CardContent className={cn("", contentClassName)}>{children}</CardContent>
 		</Card>
 	);
 }
