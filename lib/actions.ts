@@ -1,6 +1,7 @@
 "use server";
 
 import {
+	Coordinates,
 	Current_Weather_API_Response,
 	Forecast_Weather_API_Response,
 	Reverse_Geo_API_Response,
@@ -17,8 +18,10 @@ const {
 	},
 } = config;
 
-// Get current weather data, defaults coordinates to London
-export const getCurrentWeatherData = async (lat = 51.5072, lon = 0.1276) => {
+// Get current weather data
+export const getCurrentWeatherData = async (coordinates: Coordinates) => {
+	const { lat, lon } = coordinates;
+
 	const response = await fetch(
 		generateAPIString(currentWeatherEndpoint, {
 			lat,
@@ -36,8 +39,10 @@ export const getCurrentWeatherData = async (lat = 51.5072, lon = 0.1276) => {
 	return data;
 };
 
-// Get forecast weather data, defaults coordinates to London
-export const getForecastWeatherData = async (lat = 51.5072, lon = 0.1276) => {
+// Get forecast weather data
+export const getForecastWeatherData = async (coordinates: Coordinates) => {
+	const { lat, lon } = coordinates;
+
 	const response = await fetch(
 		generateAPIString(forecastWeatherEndpoint, {
 			lat,
@@ -55,8 +60,10 @@ export const getForecastWeatherData = async (lat = 51.5072, lon = 0.1276) => {
 	return data;
 };
 
-// Get city based on coordinates, defaults coordinates to London
-export const getCityReverseGeocode = async (lat = 51.5072, lon = 0.1276) => {
+// Get city based on coordinates
+export const getCityReverseGeocode = async (coordinates: Coordinates) => {
+	const { lat, lon } = coordinates;
+
 	const response = await fetch(
 		generateAPIString(reverseGeocodeEndpoint, { lat, lon, limit: 1 })
 	);

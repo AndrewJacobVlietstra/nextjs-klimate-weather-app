@@ -1,70 +1,110 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, MapPin, RefreshCw } from "lucide-react";
-import { useGeolocation } from "@/hooks/useGeolocation";
+import CustomAlert from "@/components/CustomAlert";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import RefreshButton from "@/components/RefreshButton";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import {
+	useCurrentWeatherQuery,
+	useForecastWeatherQuery,
+	useReverseGeocodeQuery,
+} from "@/hooks/useWeather";
 
 export default function DashboardPage() {
-	const { coordinates, error, isLoading, getLocation } = useGeolocation();
+	const {
+		coordinates,
+		error: locationError,
+		isLoading: locationLoading,
+		getLocation,
+	} = useGeolocation();
 
-	const handleRefresh = () => {
+	const weatherQuery = useCurrentWeatherQuery(coordinates);
+	const forecastQuery = useForecastWeatherQuery(coordinates);
+	const locationQuery = useReverseGeocodeQuery(coordinates);
+
+	const handleRefresh = async () => {
 		getLocation();
 		if (coordinates) {
-			// Reload weather data
+			weatherQuery.refetch();
+			forecastQuery.refetch();
+			locationQuery.refetch();
 		}
 	};
 
-	if (isLoading) return <DashboardSkeleton />;
+	// While fetching user Geolocation data show loading skeleton
+	if (locationLoading) return <DashboardSkeleton />;
 
-	if (error)
+	// If location error, show location error alert
+	if (locationError)
 		return (
-			<Alert variant="destructive">
-				<AlertTriangle className="h-4 w-4" />
-				<AlertTitle className="pb-2">Location Error</AlertTitle>
-				<AlertDescription>
-					<p className="pb-2">{error}</p>
-					<Button className="w-fit" onClick={getLocation} variant="outline">
-						<MapPin className="h-4 w-4" />
-						Enable Location
-					</Button>
-				</AlertDescription>
-			</Alert>
+			<CustomAlert
+				alertVariant="destructive"
+				alertTitle="Location Error"
+				alertDescription={locationError}
+				buttonIcon="MapPin"
+				buttonText="Enable Location"
+				buttonVariant="outline"
+				clickHandler={getLocation}
+			/>
 		);
 
+	// If coordinates error, show location required alert
 	if (!coordinates)
 		return (
-			<Alert variant="destructive">
-				<AlertTitle className="pb-2">Location Required</AlertTitle>
-				<AlertDescription>
-					<p className="pb-2">
-						Please enable location access to see your local weather.
-					</p>
-					<Button className="w-fit" onClick={getLocation} variant="outline">
-						<MapPin className="h-4 w-4" />
-						Enable Location
-					</Button>
-				</AlertDescription>
-			</Alert>
+			<CustomAlert
+				alertVariant="destructive"
+				alertTitle="Location Required"
+				alertDescription="Please enable location access to see your local weather."
+				buttonIcon="MapPin"
+				buttonText="Enable Location"
+				buttonVariant="outline"
+				clickHandler={getLocation}
+			/>
 		);
+
+	// If query error, show fetch failed alert
+	if (weatherQuery.error || forecastQuery.error)
+		return (
+			<CustomAlert
+				alertVariant="destructive"
+				alertTitle="Fetch Error"
+				alertDescription="Failed to fetch weather data. Please try again."
+				buttonIcon="RefreshCw"
+				buttonText="Retry"
+				buttonVariant="outline"
+				clickHandler={handleRefresh}
+			/>
+		);
+
+	// If no data yet show loading skeleton, this avoids showing undefined/null values
+	if (!weatherQuery.data || !forecastQuery.data || !locationQuery.data)
+		return <DashboardSkeleton />;
+
+	// Derived values
+	const isFetching =
+		weatherQuery.isFetching ||
+		forecastQuery.isFetching ||
+		locationQuery.isFetching;
+
+	const [location] = locationQuery.data;
+	const locationName = `${location?.name}, ${location?.state}`;
 
 	return (
 		<div className="space-y-4">
 			{/* Favourite Cities */}
 			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-bold tracking-tight">My Location</h1>
-				<Button
-					onClick={handleRefresh}
-					disabled={isLoading}
-					size="icon"
-					variant="outline"
-				>
-					<RefreshCw className="h-4 w-4" />
-				</Button>
+				<h1 className="text-xl font-bold tracking-tight">{locationName}</h1>
+				<RefreshButton
+					buttonClassName={"p-5"}
+					clickHandler={handleRefresh}
+					isLoading={isFetching}
+					iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
+				/>
 			</div>
 
-			{/* Current and hourly weather */}
+			<div className="text-4xl font-bold italic">
+				{Math.floor(weatherQuery.data.main.temp)} C <sup>o</sup>
+			</div>
 		</div>
 	);
 }
