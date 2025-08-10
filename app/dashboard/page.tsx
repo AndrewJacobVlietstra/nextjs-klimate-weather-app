@@ -5,6 +5,8 @@ import CustomAlert from "@/components/CustomAlert";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import HourlyTemperature from "@/components/HourlyTemperature";
 import RefreshButton from "@/components/RefreshButton";
+import WeatherDetails from "@/components/WeatherDetails";
+import WeatherForecast from "@/components/WeatherForecast";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
 	useCurrentWeatherQuery,
@@ -23,6 +25,11 @@ export default function DashboardPage() {
 	const weatherQuery = useCurrentWeatherQuery(coordinates);
 	const forecastQuery = useForecastWeatherQuery(coordinates);
 	const locationQuery = useReverseGeocodeQuery(coordinates);
+
+	const isFetching =
+		weatherQuery.isFetching ||
+		forecastQuery.isFetching ||
+		locationQuery.isFetching;
 
 	const handleRefresh = async () => {
 		getLocation();
@@ -82,12 +89,6 @@ export default function DashboardPage() {
 	if (!weatherQuery.data || !forecastQuery.data || !locationQuery.data)
 		return <DashboardSkeleton />;
 
-	// Derived values
-	const isFetching =
-		weatherQuery.isFetching ||
-		forecastQuery.isFetching ||
-		locationQuery.isFetching;
-
 	const [location] = locationQuery.data;
 
 	return (
@@ -97,23 +98,27 @@ export default function DashboardPage() {
 				<h1 className="text-xl font-bold tracking-tight">My Location</h1>
 				<RefreshButton
 					buttonClassName={"p-5"}
+					iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
 					clickHandler={handleRefresh}
 					isLoading={isFetching}
-					iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
 				/>
 			</div>
 
-			<div className="grid gap-6">
-				<div className="flex flex-col lg:flex-row gap-4">
-					<CurrentWeather data={weatherQuery.data} location={location} />
-					<HourlyTemperature data={forecastQuery.data} />
-				</div>
+			{isFetching ? (
+				<DashboardSkeleton />
+			) : (
+				<div className="grid gap-4">
+					<div className="flex flex-col lg:flex-row gap-4">
+						<CurrentWeather data={weatherQuery.data} location={location} />
+						<HourlyTemperature data={forecastQuery.data} />
+					</div>
 
-				<div>
-					<p>Details</p>
-					<p>Forecast</p>
+					<div className="">
+						<WeatherDetails data={weatherQuery.data} />
+						<WeatherForecast data={forecastQuery.data} />
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 }

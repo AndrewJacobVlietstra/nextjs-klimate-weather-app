@@ -26,7 +26,7 @@ export default function CurrentWeather({
 	return (
 		<CustomCard
 			cardClassName="bg-background/40 backdrop-blur-2xl"
-			contentClassName="py-4 px-8 pr-0"
+			contentClassName="py-4 pr-0"
 		>
 			<div className="grid gap-6 md:grid-cols-2 justify-items-center">
 				<div className="space-y-4">
