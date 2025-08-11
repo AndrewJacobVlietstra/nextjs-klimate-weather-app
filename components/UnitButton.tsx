@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
+import { ClassValue } from "clsx";
+import { Button } from "@/components/ui/button";
 import { Dispatch, SetStateAction } from "react";
 import { TemperatureUnits } from "@/lib/types";
 
@@ -15,12 +15,14 @@ export default function UnitButton({
 	setUnit,
 	unit,
 }: UnitButtonProps) {
+	const isCelsius = unit === "C";
+
 	return (
 		<Button
 			className={cn("btn_pulse--active", className)}
-			onClick={() => (unit === "C" ? setUnit("F") : setUnit("C"))}
+			onClick={() => (isCelsius ? setUnit("F") : setUnit("C"))}
+			title={`Toggle Unit: ${isCelsius ? "Celsius" : "Fahrenheit"}`}
 			size="icon"
-			title={`Toggle Unit: ${unit === "C" ? "Celsius" : "Fahrenheit"}`}
 			variant="outline"
 		>
 			<span className="text-2xl">{unit}</span>

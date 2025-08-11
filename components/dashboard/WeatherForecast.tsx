@@ -11,7 +11,7 @@ export default function WeatherForecast({ data }: WeatherForecastProps) {
 			<CardHeader>
 				<CardTitle>5 Day Forecast</CardTitle>
 			</CardHeader>
-			<CardContent></CardContent>
+			<CardContent>WeatherForecast</CardContent>
 		</Card>
 	);
 }

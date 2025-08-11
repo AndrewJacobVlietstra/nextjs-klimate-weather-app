@@ -27,10 +27,10 @@ export default function CurrentWeather({
 
 	return (
 		<CustomCard
-			cardClassName="bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl"
+			cardClassName="flex-1/2 bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl"
 			contentClassName="py-4 pr-0"
 		>
-			<div className="grid gap-6 md:grid-cols-2 justify-items-center">
+			<div className="grid md:grid-cols-2 justify-items-center">
 				<div className="space-y-4">
 					<div className="space-y-2">
 						<div className="flex items-end gap-1">
@@ -49,7 +49,13 @@ export default function CurrentWeather({
 
 					<div className="flex items-center gap-2">
 						<p
-							className="text-7xl font-bold tracking-tight"
+							className={`${
+								(convertUnit(temp_max, "F") >= 100 ||
+									convertUnit(feels_like, "F") >= 100) &&
+								unit === "F"
+									? "text-[3.2rem]"
+									: "text-7xl"
+							} font-bold tracking-tight`}
 							title="Current Temp."
 						>
 							{formatTemp(convertUnit(temp, unit))}

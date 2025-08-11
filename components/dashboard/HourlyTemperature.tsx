@@ -29,12 +29,12 @@ export default function HourlyTemperature({
 		}));
 
 	return (
-		<Card className="flex-1 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl">
+		<Card className="flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl">
 			<CardHeader>
 				<CardTitle>Today&apos;s Temperature</CardTitle>
 			</CardHeader>
 			<CardContent className="pl-0 pr-6">
-				<div className="h-[200px] w-full">
+				<div className="h-[340px] md:h-[200px] w-full">
 					<ResponsiveContainer width={"100%"} height={"100%"}>
 						<LineChart data={chartData}>
 							<XAxis
