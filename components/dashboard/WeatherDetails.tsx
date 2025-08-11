@@ -1,7 +1,7 @@
-import { format } from "date-fns";
 import { Current_Weather_API_Response } from "@/lib/types";
 import { Compass, Gauge, Sunrise, Sunset } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { formatDate } from "@/lib/utils";
 
 type WeatherDetailsProps = {
 	data: Current_Weather_API_Response;
@@ -13,9 +13,6 @@ export default function WeatherDetails({ data }: WeatherDetailsProps) {
 		sys,
 		wind,
 	} = data;
-
-	const formatTime = (timestamp: number) =>
-		format(new Date(timestamp * 1000), "h:mm a");
 
 	const getWindDirection = (deg: number) => {
 		const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -30,13 +27,13 @@ export default function WeatherDetails({ data }: WeatherDetailsProps) {
 			color: "text-orange-500",
 			icon: Sunrise,
 			title: "Sunrise",
-			value: formatTime(sys.sunrise),
+			value: formatDate(sys.sunrise, "h:mm a"),
 		},
 		{
 			color: "text-blue-500",
 			icon: Sunset,
 			title: "Sunset",
-			value: formatTime(sys.sunset),
+			value: formatDate(sys.sunset, "h:mm a"),
 		},
 		{
 			color: "text-green-500",

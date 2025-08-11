@@ -10,12 +10,12 @@ import WeatherForecast from "@/components/dashboard/WeatherForecast";
 import UnitButton from "@/components/UnitButton";
 import { TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
 	useCurrentWeatherQuery,
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
-import { useLocalStorage } from "@uidotdev/usehooks";
 
 export default function DashboardPage() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");

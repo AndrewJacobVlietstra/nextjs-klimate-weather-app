@@ -8,8 +8,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { format } from "date-fns";
-import { convertUnit, formatTemp } from "@/lib/utils";
+import { convertUnit, formatDate, formatTemp } from "@/lib/utils";
 
 type HourlyTemperatureProps = {
 	data: Forecast_Weather_API_Response;
@@ -23,7 +22,7 @@ export default function HourlyTemperature({
 	const chartData = data.list
 		.slice(0, 8)
 		.map(({ dt, main: { temp, feels_like } }) => ({
-			time: format(new Date(dt * 1000), "ha"),
+			time: formatDate(dt, "ha"),
 			temp: convertUnit(temp, unit),
 			feels_like: convertUnit(feels_like, unit),
 		}));
