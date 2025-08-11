@@ -10,7 +10,7 @@ export default function ThemeToggle() {
 
 	return (
 		<Button
-			className="p-5"
+			className="p-5 btn_spin-svg--active"
 			onClick={() => setTheme(isLightTheme ? "dark" : "light")}
 			title="Toggle Theme"
 			size="icon"

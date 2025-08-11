@@ -1,5 +1,5 @@
-import { Forecast_Weather_API_Response } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Forecast_Weather_API_Response, TemperatureUnits } from "@/lib/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Line,
 	LineChart,
@@ -9,20 +9,27 @@ import {
 	YAxis,
 } from "recharts";
 import { format } from "date-fns";
+import { convertUnit, formatTemp } from "@/lib/utils";
 
 type HourlyTemperatureProps = {
 	data: Forecast_Weather_API_Response;
+	unit: TemperatureUnits;
 };
 
-export default function HourlyTemperature({ data }: HourlyTemperatureProps) {
-	const chartData = data.list.slice(0, 8).map((item) => ({
-		time: format(new Date(item.dt * 1000), "ha"),
-		temp: Math.round(item.main.temp),
-		feels_like: Math.round(item.main.feels_like),
-	}));
+export default function HourlyTemperature({
+	data,
+	unit,
+}: HourlyTemperatureProps) {
+	const chartData = data.list
+		.slice(0, 8)
+		.map(({ dt, main: { temp, feels_like } }) => ({
+			time: format(new Date(dt * 1000), "ha"),
+			temp: convertUnit(temp, unit),
+			feels_like: convertUnit(feels_like, unit),
+		}));
 
 	return (
-		<Card className="flex-1 bg-background/50 backdrop-blur-2xl">
+		<Card className="flex-1 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl">
 			<CardHeader>
 				<CardTitle>Today&apos;s Temperature</CardTitle>
 			</CardHeader>
@@ -57,7 +64,7 @@ export default function HourlyTemperature({ data }: HourlyTemperatureProps) {
 															Temperature:{" "}
 														</span>
 														<span className="font-bold">
-															{payload[0].value}°
+															{formatTemp(payload[0].value)}
 														</span>
 													</div>
 													<div>
@@ -66,7 +73,7 @@ export default function HourlyTemperature({ data }: HourlyTemperatureProps) {
 																Feels Like:{" "}
 															</span>
 															<span className="font-bold">
-																{payload[1].value}°
+																{formatTemp(payload[1].value)}
 															</span>
 														</div>
 													</div>

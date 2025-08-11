@@ -1,20 +1,25 @@
 "use client";
 
-import CurrentWeather from "@/components/CurrentWeather";
+import CurrentWeather from "@/components/dashboard/CurrentWeather";
 import CustomAlert from "@/components/CustomAlert";
-import DashboardSkeleton from "@/components/DashboardSkeleton";
-import HourlyTemperature from "@/components/HourlyTemperature";
+import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import HourlyTemperature from "@/components/dashboard/HourlyTemperature";
 import RefreshButton from "@/components/RefreshButton";
-import WeatherDetails from "@/components/WeatherDetails";
-import WeatherForecast from "@/components/WeatherForecast";
+import WeatherDetails from "@/components/dashboard/WeatherDetails";
+import WeatherForecast from "@/components/dashboard/WeatherForecast";
+import UnitButton from "@/components/UnitButton";
+import { TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
 	useCurrentWeatherQuery,
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export default function DashboardPage() {
+	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
+
 	const {
 		coordinates,
 		error: locationError,
@@ -72,7 +77,7 @@ export default function DashboardPage() {
 		);
 
 	// If query error, show fetch failed alert
-	if (weatherQuery.error || forecastQuery.error)
+	if (weatherQuery.error || forecastQuery.error || locationQuery.error)
 		return (
 			<CustomAlert
 				alertVariant="destructive"
@@ -96,12 +101,15 @@ export default function DashboardPage() {
 			{/* Favourite Cities */}
 			<div className="flex items-center justify-between">
 				<h1 className="text-xl font-bold tracking-tight">My Location</h1>
-				<RefreshButton
-					buttonClassName={"p-5"}
-					iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
-					clickHandler={handleRefresh}
-					isLoading={isFetching}
-				/>
+				<div className="flex items-center gap-4">
+					<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
+					<RefreshButton
+						buttonClassName={"p-5"}
+						iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
+						clickHandler={handleRefresh}
+						isLoading={isFetching}
+					/>
+				</div>
 			</div>
 
 			{isFetching ? (
@@ -109,11 +117,15 @@ export default function DashboardPage() {
 			) : (
 				<div className="grid gap-4">
 					<div className="flex flex-col lg:flex-row gap-4">
-						<CurrentWeather data={weatherQuery.data} location={location} />
-						<HourlyTemperature data={forecastQuery.data} />
+						<CurrentWeather
+							data={weatherQuery.data}
+							location={location}
+							unit={unit}
+						/>
+						<HourlyTemperature data={forecastQuery.data} unit={unit} />
 					</div>
 
-					<div className="">
+					<div className="flex flex-col lg:flex-row gap-4">
 						<WeatherDetails data={weatherQuery.data} />
 						<WeatherForecast data={forecastQuery.data} />
 					</div>

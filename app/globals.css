@@ -118,3 +118,21 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@keyframes customSpin {
+	to {
+		transform: rotate(-360deg);
+	}
+}
+
+:active.btn_spin-svg--active {
+	svg {
+		animation: customSpin 1s linear infinite;
+	}
+}
+
+:active.btn_pulse--active {
+	span {
+		animation: var(--animate-pulse);
+	}
+}

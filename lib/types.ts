@@ -1,3 +1,5 @@
+export type TemperatureUnits = "C" | "F";
+
 export type WeatherData = "current" | "forecast" | "reverseGeo";
 
 export type Coordinates = {

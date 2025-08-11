@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { Current_Weather_API_Response } from "@/lib/types";
 import { Compass, Gauge, Sunrise, Sunset } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 type WeatherDetailsProps = {
 	data: Current_Weather_API_Response;
@@ -53,20 +53,25 @@ export default function WeatherDetails({ data }: WeatherDetailsProps) {
 	];
 
 	return (
-		<Card className="bg-background/50">
+		<Card className="bg-background/50 hover:bg-background/65 transition-colors flex-1/2">
 			<CardHeader>
 				<CardTitle>Weather Details</CardTitle>
 			</CardHeader>
 
 			<CardContent>
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="grid gap-4 sm:grid-cols-2">
 					{details.map(({ color, icon: DetailIcon, title, value }) => (
-						<Card className="bg-background/50" key={title}>
+						<Card
+							className="bg-background/50 hover:bg-background/100 transition-colors"
+							key={title}
+						>
 							<CardContent className="flex items-center gap-3">
 								<DetailIcon className={`size-6 ${color}`} />
 								<div>
 									<p className="text-sm font-normal leading-none">{title}</p>
-									<p className="text-sm text-muted-foreground">{value}</p>
+									<p className="text-sm font-normal text-muted-foreground">
+										{value}
+									</p>
 								</div>
 							</CardContent>
 						</Card>

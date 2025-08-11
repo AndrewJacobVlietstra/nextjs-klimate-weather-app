@@ -1,19 +1,23 @@
 import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
+import { convertUnit, formatTemp } from "@/lib/utils";
 import {
 	Current_Weather_API_Response,
 	Reverse_Geo_API_Response,
+	TemperatureUnits,
 } from "@/lib/types";
-import CustomCard from "./CustomCard";
+import CustomCard from "@/components/CustomCard";
 import Image from "next/image";
 
 type CurrentWeatherProps = {
 	data: Current_Weather_API_Response;
 	location?: Reverse_Geo_API_Response[0];
+	unit: TemperatureUnits;
 };
 
 export default function CurrentWeather({
 	data,
 	location,
+	unit,
 }: CurrentWeatherProps) {
 	const {
 		main: { feels_like, temp, temp_min, temp_max, humidity },
@@ -21,11 +25,9 @@ export default function CurrentWeather({
 		wind: { speed },
 	} = data;
 
-	const formatTemp = (temp: number) => `${Math.round(temp)} °`;
-
 	return (
 		<CustomCard
-			cardClassName="bg-background/40 backdrop-blur-2xl"
+			cardClassName="bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl"
 			contentClassName="py-4 pr-0"
 		>
 			<div className="grid gap-6 md:grid-cols-2 justify-items-center">
@@ -46,22 +48,31 @@ export default function CurrentWeather({
 					</div>
 
 					<div className="flex items-center gap-2">
-						<p className="text-7xl font-bold tracking-tight">
-							{formatTemp(temp)}
+						<p
+							className="text-7xl font-bold tracking-tight"
+							title="Current Temp."
+						>
+							{formatTemp(convertUnit(temp, unit))}
 						</p>
 
 						<div className="space-y-1">
 							<p className="pl-1 text-sm font-normal text-muted-foreground">
-								Feels Like {formatTemp(feels_like)}
+								Feels Like {formatTemp(convertUnit(feels_like, unit))}
 							</p>
 							<div className="flex gap-2 text-sm font-normal">
-								<span className="flex items-center gap-1 text-blue-500">
+								<span
+									className="flex items-center gap-1 text-blue-500"
+									title="Min Temp."
+								>
 									<ArrowDown className="size-3.5" />
-									{formatTemp(temp_min)}
+									{formatTemp(convertUnit(temp_min, unit))}
 								</span>
-								<span className="flex items-center gap-1 text-red-500">
+								<span
+									className="flex items-center gap-1 text-orange-500"
+									title="Max Temp."
+								>
 									<ArrowUp className="size-3.5" />
-									{formatTemp(temp_max)}
+									{formatTemp(convertUnit(temp_max, unit))}
 								</span>
 							</div>
 						</div>
