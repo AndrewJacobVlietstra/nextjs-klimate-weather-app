@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Forecast_Weather_API_Response, TemperatureUnits } from "@/lib/types";
+import { DailyForecast, TemperatureUnits } from "@/lib/types";
 import {
 	capitalizeString,
 	convertUnit,
@@ -10,56 +10,19 @@ import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
 import Image from "next/image";
 
 type WeatherForecastProps = {
-	data: Forecast_Weather_API_Response;
+	data: DailyForecast[];
 	unit: TemperatureUnits;
 };
 
-type DailyForecast = {
-	date: number;
-	humidity: number;
-	temp_min: number;
-	temp_max: number;
-	wind: number;
-	weather: {
-		description: string;
-		icon: string;
-		id: number;
-		main: string;
-	};
-};
-
 export default function WeatherForecast({ data, unit }: WeatherForecastProps) {
-	const dailyForecastsObj = data.list.reduce((acc, item) => {
-		const date = formatDate(item.dt, "yyyy-MM-dd");
-
-		if (!acc[date]) {
-			acc[date] = {
-				date: item.dt,
-				humidity: item.main.humidity,
-				temp_min: item.main.temp_min,
-				temp_max: item.main.temp_max,
-				wind: item.wind.speed,
-				weather: item.weather[0],
-			};
-		} else {
-			acc[date].temp_min = Math.min(acc[date].temp_min, item.main.temp_min);
-			acc[date].temp_max = Math.max(acc[date].temp_max, item.main.temp_max);
-		}
-
-		return acc;
-	}, {} as Record<string, DailyForecast>);
-
-	// Convert object of forecast objects to array of forecast objects
-	const dailyForecastsArr = Object.values(dailyForecastsObj).slice(0, 5);
-
 	return (
 		<Card className="flex-1/2 bg-background/50 hover:bg-background/65 transition-colors">
 			<CardHeader>
 				<CardTitle>5-Day Forecast</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<div className="grid gap-4">
-					{dailyForecastsArr.map((forecast) => (
+				<div className="grid gap-4.5">
+					{data.map((forecast) => (
 						<div
 							key={forecast.date}
 							className="grid grid-cols-[1.62fr_1.3fr_1.1fr] gap-4 items-center rounded-lg border p-4 bg-background/50 hover:bg-background/100 transition-colors"

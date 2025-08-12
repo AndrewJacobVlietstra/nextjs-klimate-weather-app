@@ -1,6 +1,6 @@
-import { Command, CommandInput } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
+import { Command, CommandInput } from "@/components/ui/command";
 
 type SearchbarProps = {
 	className?: ClassValue;

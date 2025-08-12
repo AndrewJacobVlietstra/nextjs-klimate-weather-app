@@ -1,7 +1,4 @@
-import {
-	Current_Weather_API_Response,
-	Forecast_Weather_API_Response,
-} from "@/lib/types";
+import { Current_Weather_API_Response, DailyForecast } from "@/lib/types";
 import {
 	Clock,
 	Cloud,
@@ -15,13 +12,13 @@ import {
 	Sunset,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { countryName, formatDate } from "@/lib/utils";
+import { average, countryName, formatDate } from "@/lib/utils";
 import { countries, hasFlag } from "country-flag-icons";
 import Image from "next/image";
 
 type WeatherDetailsProps = {
 	weatherData: Current_Weather_API_Response;
-	forecastData: Forecast_Weather_API_Response;
+	forecastData: DailyForecast[];
 };
 
 export default function WeatherDetails({
@@ -37,14 +34,10 @@ export default function WeatherDetails({
 		visibility,
 	} = weatherData;
 
-	const {
-		list: [
-			{
-				clouds: { all: cloudiness },
-				pop: precipitation,
-			},
-		],
-	} = forecastData;
+	const { cloudiness, rain_chance } = forecastData[0];
+
+	const avgCloudiness = Math.round(average(cloudiness));
+	const avgRainChance = Math.round(average(rain_chance) * 100);
 
 	const getWindDirection = (deg: number, abbreviated?: boolean) => {
 		const directionsAbbr = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -99,7 +92,11 @@ export default function WeatherDetails({
 			color: "text-primary",
 			title: "Cloudiness",
 			icon: Cloud,
-			value: `${cloudiness}%`,
+			value: (
+				<span
+					title={`Average Cloudiness: ${avgCloudiness}%`}
+				>{`${avgCloudiness}%`}</span>
+			),
 		},
 		{
 			color: "text-primary/90",
@@ -109,9 +106,13 @@ export default function WeatherDetails({
 		},
 		{
 			color: "text-sky-400",
-			title: "Rain Chance",
+			title: `Rain Chance`,
 			icon: CloudRainWind,
-			value: `${precipitation * 100}%`,
+			value: (
+				<span
+					title={`Average Rain Chance: ${avgRainChance}%`}
+				>{`${avgRainChance}%`}</span>
+			),
 		},
 		{
 			color: "text-teal-400",

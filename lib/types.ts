@@ -7,6 +7,22 @@ export type Coordinates = {
 	lon: number;
 };
 
+export type DailyForecast = {
+	date: number;
+	humidity: number;
+	cloudiness: number[];
+	rain_chance: number[];
+	temp_min: number;
+	temp_max: number;
+	wind: number;
+	weather: {
+		description: string;
+		icon: string;
+		id: number;
+		main: string;
+	};
+};
+
 export type GeolocationState = {
 	coordinates: Coordinates | null;
 	error: string | null;

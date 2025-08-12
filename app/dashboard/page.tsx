@@ -16,6 +16,7 @@ import {
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
+import { formatForecastData } from "@/lib/utils";
 
 export default function DashboardPage() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
@@ -94,6 +95,8 @@ export default function DashboardPage() {
 	if (!weatherQuery.data || !forecastQuery.data || !locationQuery.data)
 		return <DashboardSkeleton />;
 
+	const dailyForecasts = formatForecastData(forecastQuery.data);
+
 	const [location] = locationQuery.data;
 
 	return (
@@ -126,10 +129,10 @@ export default function DashboardPage() {
 					</div>
 
 					<div className="flex flex-col lg:flex-row gap-4">
-						<WeatherForecast data={forecastQuery.data} unit={unit} />
+						<WeatherForecast data={dailyForecasts} unit={unit} />
 						<WeatherDetails
 							weatherData={weatherQuery.data}
-							forecastData={forecastQuery.data}
+							forecastData={dailyForecasts}
 						/>
 					</div>
 				</div>
