@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { countryName, formatDate } from "@/lib/utils";
+import { countries, hasFlag } from "country-flag-icons";
+import Image from "next/image";
 
 type WeatherDetailsProps = {
 	weatherData: Current_Weather_API_Response;
@@ -30,7 +32,7 @@ export default function WeatherDetails({
 		main: { pressure },
 		coord: { lat, lon },
 		dt,
-		sys,
+		sys: { country, sunrise, sunset },
 		wind,
 		visibility,
 	} = weatherData;
@@ -69,13 +71,13 @@ export default function WeatherDetails({
 			color: "text-orange-400",
 			title: "Sunrise",
 			icon: Sunrise,
-			value: formatDate(sys.sunrise, "h:mm a"),
+			value: formatDate(sunrise, "h:mm a"),
 		},
 		{
 			color: "text-indigo-400",
 			title: "Sunset",
 			icon: Sunset,
-			value: formatDate(sys.sunset, "h:mm a"),
+			value: formatDate(sunset, "h:mm a"),
 		},
 		{
 			color: "text-green-500",
@@ -141,8 +143,9 @@ export default function WeatherDetails({
 		{
 			color: "text-sky-300",
 			title: "Country",
-			icon: Globe,
-			value: countryName.of(sys.country),
+			img: hasFlag(country) && countries.includes(country),
+			icon: !hasFlag(country) && !countries.includes(country) && Globe,
+			value: countryName.of(country),
 		},
 	];
 
@@ -154,13 +157,26 @@ export default function WeatherDetails({
 
 			<CardContent>
 				<div className="grid max-[525px]:grid-cols-1 grid-cols-2 gap-4">
-					{details.map(({ color, icon: DetailIcon, title, value }) => (
+					{details.map(({ color, icon: DetailIcon, img, title, value }) => (
 						<Card
 							className="flex flex-row justify-center py-7 pr-4 bg-background/50 hover:bg-background/100 transition-colors"
 							key={title}
 						>
 							<CardContent className="flex items-center gap-3 ">
-								<DetailIcon className={`size-6 ${color}`} />
+								{DetailIcon ? (
+									<DetailIcon className={`size-6 ${color}`} />
+								) : null}
+
+								{img ? (
+									<Image
+										alt={`${countryName.of(country)} Flag`}
+										title={`${countryName.of(country)} Flag`}
+										src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
+										width={26}
+										height={26}
+									/>
+								) : null}
+
 								<div>
 									<p className="text-sm font-normal leading-none">{title}</p>
 									<p className="text-sm font-normal text-muted-foreground">
