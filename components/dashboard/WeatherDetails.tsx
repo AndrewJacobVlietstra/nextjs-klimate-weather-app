@@ -1,29 +1,30 @@
-import { Current_Weather_API_Response } from "@/lib/types";
+import {
+	Current_Weather_API_Response,
+	Forecast_Weather_API_Response,
+} from "@/lib/types";
 import {
 	Clock,
+	Cloud,
 	CloudRainWind,
 	Compass,
-	Earth,
 	Eye,
 	Gauge,
+	Globe,
 	MapPinned,
 	Sunrise,
 	Sunset,
-	Users,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { countryName, formatDate } from "@/lib/utils";
 
 type WeatherDetailsProps = {
-	data: Current_Weather_API_Response;
-	precipitation: number;
-	population: number;
+	weatherData: Current_Weather_API_Response;
+	forecastData: Forecast_Weather_API_Response;
 };
 
 export default function WeatherDetails({
-	data,
-	precipitation,
-	population,
+	weatherData,
+	forecastData,
 }: WeatherDetailsProps) {
 	const {
 		main: { pressure },
@@ -32,14 +33,35 @@ export default function WeatherDetails({
 		sys,
 		wind,
 		visibility,
-	} = data;
+	} = weatherData;
 
-	const getWindDirection = (deg: number) => {
-		const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+	const {
+		list: [
+			{
+				clouds: { all: cloudiness },
+				pop: precipitation,
+			},
+		],
+	} = forecastData;
+
+	const getWindDirection = (deg: number, abbreviated?: boolean) => {
+		const directionsAbbr = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+		const directionsExtended = [
+			"North",
+			"North East",
+			"East",
+			"South East",
+			"South",
+			"South West",
+			"West",
+			"North West",
+		];
 
 		const index = Math.round(((deg %= 360) < 0 ? deg + 360 : deg) / 45) % 8;
 
-		return directions[index];
+		if (abbreviated) return directionsAbbr[index];
+
+		return directionsExtended[index];
 	};
 
 	const details = [
@@ -59,19 +81,11 @@ export default function WeatherDetails({
 			color: "text-green-500",
 			title: "Wind Direction",
 			icon: Compass,
-			value: `${getWindDirection(wind.deg)} (${wind.deg}°)`,
-		},
-		{
-			color: "text-sky-400",
-			title: "Rain Chance",
-			icon: CloudRainWind,
-			value: `${precipitation}%`,
-		},
-		{
-			color: "text-primary",
-			title: "Visibility",
-			icon: Eye,
-			value: `${visibility / 1000}km`,
+			value: (
+				<span
+					title={`${getWindDirection(wind.deg, false)} (${wind.deg}°)`}
+				>{`${getWindDirection(wind.deg, true)} (${wind.deg}°)`}</span>
+			),
 		},
 		{
 			color: "text-purple-500",
@@ -80,10 +94,22 @@ export default function WeatherDetails({
 			value: `${pressure} hPa`,
 		},
 		{
-			color: "text-fuchsia-400",
-			title: "Population",
-			icon: Users,
-			value: `${Math.round(population / 1000)} K`,
+			color: "text-primary",
+			title: "Cloudiness",
+			icon: Cloud,
+			value: `${cloudiness}%`,
+		},
+		{
+			color: "text-primary/90",
+			title: "Visibility",
+			icon: Eye,
+			value: `${visibility / 1000}km`,
+		},
+		{
+			color: "text-sky-400",
+			title: "Rain Chance",
+			icon: CloudRainWind,
+			value: `${precipitation * 100}%`,
 		},
 		{
 			color: "text-teal-400",
@@ -97,15 +123,25 @@ export default function WeatherDetails({
 			icon: MapPinned,
 			value: (
 				<>
-					<span className="block pt-[0.1rem]">Lat: {lat},</span>
-					<span className="block">Lon: {lon}</span>
+					<span
+						className="block pt-[0.1rem]"
+						title={`Latitude: ${Math.abs(lat)} ${lat > 0 ? "N" : "S"}°`}
+					>
+						Lat: {`${Math.abs(lat)} ${lat > 0 ? "N" : "S"}°`}
+					</span>
+					<span
+						className="block"
+						title={`Longitude: ${Math.abs(lon)} ${lon > 0 ? "E" : "W"}°`}
+					>
+						Lon: {`${Math.abs(lon)} ${lon > 0 ? "E" : "W"}°`}
+					</span>
 				</>
 			),
 		},
 		{
 			color: "text-sky-300",
 			title: "Country",
-			icon: Earth,
+			icon: Globe,
 			value: countryName.of(sys.country),
 		},
 	];
@@ -117,7 +153,7 @@ export default function WeatherDetails({
 			</CardHeader>
 
 			<CardContent>
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid max-[525px]:grid-cols-1 grid-cols-2 gap-4">
 					{details.map(({ color, icon: DetailIcon, title, value }) => (
 						<Card
 							className="flex flex-row justify-center py-7 pr-4 bg-background/50 hover:bg-background/100 transition-colors"
