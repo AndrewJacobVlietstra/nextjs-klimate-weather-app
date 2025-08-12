@@ -12,6 +12,18 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export const capitalizeString = (input: string) => {
+	const splitValues = input.split(" ");
+
+	const result = splitValues.map(
+		(val) => `${val.slice(0, 1).toUpperCase() + val.slice(1)}`
+	);
+
+	return result.join(" ");
+};
+
+export const countryName = new Intl.DisplayNames(["en"], { type: "region" });
+
 export const sleep = async (delay = 1000) => {
 	await new Promise((resolve) => setTimeout(resolve, delay));
 };
@@ -25,6 +37,7 @@ export const formatTemp = (temp: number | string) => `${Math.round(+temp)} °`;
 export const convertUnit = (temp: number | string, unit: TemperatureUnits) => {
 	if (unit === "C") return +temp;
 	if (unit === "F") return +temp * (9 / 5) + 32;
+	if (unit === "K") return +temp + 273.15;
 
 	return +temp;
 };

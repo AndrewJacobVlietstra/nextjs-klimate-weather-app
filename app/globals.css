@@ -131,7 +131,7 @@
 	}
 }
 
-:active.btn_pulse--active {
+button:hover.btn_pulse--hover {
 	span {
 		animation: var(--animate-pulse);
 	}

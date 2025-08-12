@@ -126,8 +126,12 @@ export default function DashboardPage() {
 					</div>
 
 					<div className="flex flex-col lg:flex-row gap-4">
-						<WeatherDetails data={weatherQuery.data} />
-						<WeatherForecast data={forecastQuery.data} />
+						<WeatherDetails
+							data={weatherQuery.data}
+							precipitation={forecastQuery.data.list[0].pop}
+							population={forecastQuery.data.city.population}
+						/>
+						<WeatherForecast data={forecastQuery.data} unit={unit} />
 					</div>
 				</div>
 			)}

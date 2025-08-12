@@ -16,12 +16,17 @@ export default function UnitButton({
 	unit,
 }: UnitButtonProps) {
 	const isCelsius = unit === "C";
+	const isFahrenheit = unit === "F";
 
 	return (
 		<Button
-			className={cn("btn_pulse--active", className)}
-			onClick={() => (isCelsius ? setUnit("F") : setUnit("C"))}
-			title={`Toggle Unit: ${isCelsius ? "Celsius" : "Fahrenheit"}`}
+			className={cn("btn_pulse--hover", className)}
+			onClick={() =>
+				isCelsius ? setUnit("F") : isFahrenheit ? setUnit("K") : setUnit("C")
+			}
+			title={`Toggle Unit: ${
+				isCelsius ? "Celsius" : isFahrenheit ? "Fahrenheit" : "Kelvin"
+			}`}
 			size="icon"
 			variant="outline"
 		>

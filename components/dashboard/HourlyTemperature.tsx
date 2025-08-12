@@ -23,8 +23,8 @@ export default function HourlyTemperature({
 		.slice(0, 8)
 		.map(({ dt, main: { temp, feels_like } }) => ({
 			time: formatDate(dt, "ha"),
-			temp: convertUnit(temp, unit),
-			feels_like: convertUnit(feels_like, unit),
+			temp: Math.round(convertUnit(temp, unit)),
+			feels_like: Math.round(convertUnit(feels_like, unit)),
 		}));
 
 	return (
@@ -45,6 +45,7 @@ export default function HourlyTemperature({
 							/>
 
 							<YAxis
+								domain={["auto", "auto"]}
 								stroke="#888"
 								fontSize={12}
 								tickLine={false}

@@ -1,4 +1,4 @@
-export type TemperatureUnits = "C" | "F";
+export type TemperatureUnits = "C" | "F" | "K";
 
 export type WeatherData = "current" | "forecast" | "reverseGeo";
 
@@ -85,6 +85,14 @@ export type Forecast_Weather_API_Response = {
 	}[];
 	message: number;
 };
+
+export type Direct_Geo_API_Response = {
+	country: string;
+	lat: number;
+	lon: number;
+	name: string;
+	state?: string;
+}[];
 
 export type Reverse_Geo_API_Response = {
 	country: string;

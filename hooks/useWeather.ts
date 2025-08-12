@@ -1,5 +1,6 @@
 import {
 	getCityReverseGeocode,
+	getCoordsDirectGeocode,
 	getCurrentWeatherData,
 	getForecastWeatherData,
 } from "@/lib/actions";
@@ -25,9 +26,17 @@ export const useForecastWeatherQuery = (coordinates?: Coordinates | null) => {
 	});
 };
 
+export const useDirectGeocodeQuery = (query?: string | null) => {
+	return useQuery({
+		queryKey: WEATHER_KEYS.directGeocode(query ?? "N/A"),
+		queryFn: async () => (query ? await getCoordsDirectGeocode(query) : null),
+		enabled: query ? query.length >= 1 : false,
+	});
+};
+
 export const useReverseGeocodeQuery = (coordinates?: Coordinates | null) => {
 	return useQuery({
-		queryKey: WEATHER_KEYS.geocode(coordinates ?? { lat: 0, lon: 0 }),
+		queryKey: WEATHER_KEYS.reverseGeocode(coordinates ?? { lat: 0, lon: 0 }),
 		queryFn: async () =>
 			coordinates ? await getCityReverseGeocode(coordinates) : null,
 		enabled: !!coordinates,

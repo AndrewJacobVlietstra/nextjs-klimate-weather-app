@@ -25,6 +25,8 @@ export default function CurrentWeather({
 		wind: { speed },
 	} = data;
 
+	const maxTempValue = Math.max(feels_like, temp, temp_min, temp_max);
+
 	return (
 		<CustomCard
 			cardClassName="flex-1/2 bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl"
@@ -50,9 +52,8 @@ export default function CurrentWeather({
 					<div className="flex items-center gap-2">
 						<p
 							className={`${
-								(convertUnit(temp_max, "F") >= 100 ||
-									convertUnit(feels_like, "F") >= 100) &&
-								unit === "F"
+								(convertUnit(maxTempValue, "F") >= 100 && unit === "F") ||
+								(convertUnit(maxTempValue, "K") >= 100 && unit === "K")
 									? "text-[3.2rem]"
 									: "text-7xl"
 							} font-bold tracking-tight`}
