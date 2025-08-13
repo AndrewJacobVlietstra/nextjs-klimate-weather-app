@@ -28,7 +28,7 @@ export const useForecastWeatherQuery = (coordinates?: Coordinates | null) => {
 
 export const useDirectGeocodeQuery = (query?: string | null) => {
 	return useQuery({
-		queryKey: WEATHER_KEYS.directGeocode(query ?? "N/A"),
+		queryKey: WEATHER_KEYS.directGeocode(query || "N/A"),
 		queryFn: async () => (query ? await getCoordsDirectGeocode(query) : null),
 		enabled: query ? query.length >= 1 : false,
 	});

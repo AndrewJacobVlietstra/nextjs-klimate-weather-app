@@ -36,8 +36,8 @@ export default function WeatherDetails({
 
 	const { cloudiness, rain_chance } = forecastData[0];
 
-	const avgCloudiness = Math.round(average(cloudiness));
-	const avgRainChance = Math.round(average(rain_chance) * 100);
+	const avgCloudiness = average(cloudiness);
+	const avgRainChance = average(rain_chance) * 100;
 
 	const getWindDirection = (deg: number, abbreviated?: boolean) => {
 		const directionsAbbr = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -94,8 +94,8 @@ export default function WeatherDetails({
 			icon: Cloud,
 			value: (
 				<span
-					title={`Average Cloudiness: ${avgCloudiness}%`}
-				>{`${avgCloudiness}%`}</span>
+					title={`Average Cloudiness: ${Math.round(avgCloudiness)}%`}
+				>{`${Math.round(avgCloudiness)}%`}</span>
 			),
 		},
 		{
@@ -110,8 +110,8 @@ export default function WeatherDetails({
 			icon: CloudRainWind,
 			value: (
 				<span
-					title={`Average Rain Chance: ${avgRainChance}%`}
-				>{`${avgRainChance}%`}</span>
+					title={`Average Rain Chance: ${Math.round(avgRainChance)}%`}
+				>{`${Math.round(avgRainChance)}%`}</span>
 			),
 		},
 		{

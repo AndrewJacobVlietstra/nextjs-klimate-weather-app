@@ -11,8 +11,8 @@ export default function Header() {
 						<Logo />
 					</li>
 
-					<li className="relative flex items-center gap-x-6">
-						<Searchbar className={""} />
+					<li className="flex items-center gap-4">
+						<Searchbar />
 						<ThemeToggle />
 					</li>
 				</ul>

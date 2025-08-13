@@ -1,10 +1,21 @@
-export type TemperatureUnits = "C" | "F" | "K";
+export type TemperatureUnits = "C" | "F";
 
 export type WeatherData = "current" | "forecast" | "reverseGeo";
 
 export type Coordinates = {
 	lat: number;
 	lon: number;
+};
+
+export type SearchHistoryItem = {
+	country: string;
+	id: string;
+	lat: number;
+	lon: number;
+	name: string;
+	searchedAt: number;
+	state?: string;
+	query: string;
 };
 
 export type DailyForecast = {

@@ -35,7 +35,6 @@ export const countryName = new Intl.DisplayNames(["en"], { type: "region" });
 export const convertUnit = (temp: number | string, unit: TemperatureUnits) => {
 	if (unit === "C") return +temp;
 	if (unit === "F") return +temp * (9 / 5) + 32;
-	if (unit === "K") return +temp + 273.15;
 
 	return +temp;
 };
@@ -78,6 +77,12 @@ export const formatForecastData = (data: Forecast_Weather_API_Response) => {
 	const dailyForecastsArr = Object.values(dailyForecastsObj).slice(0, 5);
 
 	return dailyForecastsArr;
+};
+
+export const isStringUndefined = (str: string) => {
+	if (str === "undefined") return undefined;
+
+	return str;
 };
 
 // Generates string used to call API based on Endpoint and params provided

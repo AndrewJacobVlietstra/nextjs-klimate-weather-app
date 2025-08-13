@@ -9,7 +9,7 @@ export const useLocalStorage = <T>(
 	// Check if window object exists, avoid server error localStorage not defined
 	const isClient = typeof window !== "undefined";
 
-	const [value, setValue] = useState(() =>
+	const [storedValue, setStoredValue] = useState<T>(() =>
 		isClient
 			? JSON.parse(
 					localStorage.getItem(key) || JSON.stringify(initialValue || "N/A")
@@ -18,8 +18,8 @@ export const useLocalStorage = <T>(
 	);
 
 	useEffect(() => {
-		localStorage.setItem(key, JSON.stringify(value));
-	}, [key, value]);
+		localStorage.setItem(key, JSON.stringify(storedValue));
+	}, [key, storedValue]);
 
-	return [value, setValue] as const;
+	return [storedValue, setStoredValue] as const;
 };
