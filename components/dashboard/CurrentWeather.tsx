@@ -35,25 +35,28 @@ export default function CurrentWeather({
 			<div className="grid md:grid-cols-2 justify-items-center">
 				<div className="space-y-4">
 					<div className="space-y-2">
-						<div className="flex items-end gap-1">
+						<div className="flex flex-col gap-1">
 							<h2 className="text-2xl font-bold tracking-tight">
 								{location?.name}
 							</h2>
-							{location?.state && (
-								<span className="text-muted-foreground">
-									, {location.state}
-								</span>
-							)}
-						</div>
+							<p>
+								{location?.state && (
+									<span className="text-muted-foreground">
+										{location.state},{" "}
+									</span>
+								)}
 
-						<p className="text-sm text-muted-foreground">{location?.country}</p>
+								<span className="text-sm text-muted-foreground">
+									{location?.country}
+								</span>
+							</p>
+						</div>
 					</div>
 
 					<div className="flex items-center gap-2">
 						<p
 							className={`${
-								(convertUnit(maxTempValue, "F") >= 100 && unit === "F") ||
-								(convertUnit(maxTempValue, "K") >= 100 && unit === "K")
+								convertUnit(maxTempValue, "F") >= 100 && unit === "F"
 									? "text-[3.2rem]"
 									: "text-7xl"
 							} font-bold tracking-tight`}

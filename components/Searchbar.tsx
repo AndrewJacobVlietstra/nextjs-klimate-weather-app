@@ -62,7 +62,7 @@ export default function Searchbar({}: SearchbarProps) {
 			query,
 		});
 
-		router.push(`/city/${name}?lat=${lat}&lon=${lon}`);
+		router.push(`/?city=${name}&lat=${lat}&lon=${lon}`);
 	};
 
 	return (

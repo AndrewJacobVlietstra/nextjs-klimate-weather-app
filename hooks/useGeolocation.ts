@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { GeolocationState } from "@/lib/types";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
-export const useGeolocation = () => {
+export const useGeolocation = (
+	searchParams: ReadonlyURLSearchParams,
+	isCoordsInSearchParams: boolean
+) => {
 	// Initialize state for location data
 	const [locationData, setLocationData] = useState<GeolocationState>({
 		coordinates: null,
@@ -10,7 +14,7 @@ export const useGeolocation = () => {
 	});
 
 	// Will check if browser supports geolocation API, sets location data accordingly..
-	const getLocation = () => {
+	const getCurrentLocation = () => {
 		setLocationData((prev) => ({ ...prev, isLoading: true, error: null }));
 
 		if (!navigator.geolocation) {
@@ -72,11 +76,28 @@ export const useGeolocation = () => {
 	};
 
 	useEffect(() => {
-		getLocation();
-	}, []);
+		// If no coordinates in searchParams, get current location data
+		if (!isCoordsInSearchParams) {
+			getCurrentLocation();
+		}
+
+		// If coordinates exist in searchParams, get that location data
+		if (isCoordsInSearchParams) {
+			setLocationData((prev) => ({ ...prev, isLoading: true, error: null }));
+
+			const lat = Number(searchParams.get("lat"));
+			const lon = Number(searchParams.get("lon"));
+
+			setLocationData({
+				coordinates: { lat, lon },
+				error: null,
+				isLoading: false,
+			});
+		}
+	}, [searchParams, isCoordsInSearchParams]);
 
 	return {
 		...locationData,
-		getLocation,
+		getCurrentLocation,
 	};
 };

@@ -8,25 +8,32 @@ import RefreshButton from "@/components/RefreshButton";
 import WeatherDetails from "@/components/dashboard/WeatherDetails";
 import WeatherForecast from "@/components/dashboard/WeatherForecast";
 import UnitButton from "@/components/UnitButton";
+import { formatForecastData } from "@/lib/utils";
 import { TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useSearchParams } from "next/navigation";
 import {
 	useCurrentWeatherQuery,
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
-import { formatForecastData } from "@/lib/utils";
 
 export default function HomePage() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
+
+	const searchParams = useSearchParams();
+	const searchParamsObj = Object.fromEntries(searchParams);
+	const searchParamsKeys = Object.keys(searchParamsObj);
+	const isCoordsInSearchParams =
+		searchParamsKeys.includes("lat") && searchParamsKeys.includes("lon");
 
 	const {
 		coordinates,
 		error: locationError,
 		isLoading: locationLoading,
-		getLocation,
-	} = useGeolocation();
+		getCurrentLocation,
+	} = useGeolocation(searchParams, isCoordsInSearchParams);
 
 	const weatherQuery = useCurrentWeatherQuery(coordinates);
 	const forecastQuery = useForecastWeatherQuery(coordinates);
@@ -38,7 +45,8 @@ export default function HomePage() {
 		locationQuery.isFetching;
 
 	const handleRefresh = async () => {
-		getLocation();
+		if (!isCoordsInSearchParams) getCurrentLocation();
+
 		if (coordinates) {
 			weatherQuery.refetch();
 			forecastQuery.refetch();
@@ -59,7 +67,7 @@ export default function HomePage() {
 				buttonIcon="MapPin"
 				buttonText="Enable Location"
 				buttonVariant="outline"
-				clickHandler={getLocation}
+				clickHandler={getCurrentLocation}
 			/>
 		);
 
@@ -73,7 +81,7 @@ export default function HomePage() {
 				buttonIcon="MapPin"
 				buttonText="Enable Location"
 				buttonVariant="outline"
-				clickHandler={getLocation}
+				clickHandler={getCurrentLocation}
 			/>
 		);
 
@@ -103,7 +111,9 @@ export default function HomePage() {
 		<div className="space-y-4">
 			{/* Favourite Cities */}
 			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-bold tracking-tight">My Location</h1>
+				<h1 className="text-xl font-bold tracking-tight">
+					{isCoordsInSearchParams ? "" : "My Location"}
+				</h1>
 				<div className="flex items-center gap-4">
 					<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
 					<RefreshButton
