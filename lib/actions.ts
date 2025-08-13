@@ -1,5 +1,6 @@
 "use server";
 
+import { config } from "@/lib/config";
 import {
 	Coordinates,
 	Current_Weather_API_Response,
@@ -7,8 +8,7 @@ import {
 	Forecast_Weather_API_Response,
 	Reverse_Geo_API_Response,
 } from "@/lib/types";
-import { generateAPIString } from "./utils";
-import { config } from "@/lib/config";
+import { generateAPIString } from "@/lib/utils";
 
 const {
 	openweather: {

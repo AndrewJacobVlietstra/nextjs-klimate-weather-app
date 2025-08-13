@@ -1,6 +1,6 @@
 import { AlertTriangle, MapPin, RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 type CustomAlertProps = {
 	alertVariant?: "default" | "destructive";

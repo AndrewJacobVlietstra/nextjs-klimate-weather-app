@@ -1,4 +1,4 @@
-import { Coordinates } from "./types";
+import { Coordinates } from "@/lib/types";
 
 export const WEATHER_KEYS = {
 	weather: (coordinates: Coordinates) => ["weather", coordinates] as const,

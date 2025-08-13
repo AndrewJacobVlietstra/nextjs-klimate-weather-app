@@ -1,12 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
+import { config } from "@/lib/config";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
-import { config } from "@/lib/config";
 import {
 	DailyForecast,
 	Forecast_Weather_API_Response,
 	TemperatureUnits,
-} from "./types";
+} from "@/lib/types";
 
 const {
 	openweather: { privateKey },

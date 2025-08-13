@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useMount } from "@/hooks/useMount";
+import { Skeleton } from "@/components/ui/skeleton";
 
 {
 	/* Because we cannot know the theme on the server, many of the values returned from
@@ -19,7 +20,7 @@ export default function Logo() {
 	const { theme } = useTheme();
 	const isLightTheme = theme === "light";
 
-	if (!mounted) return null;
+	if (!mounted) return <Skeleton className="w-[64px] h-[52px] rounded-lg" />;
 
 	return (
 		<Link href={"/"}>

@@ -1,5 +1,5 @@
 import { SearchHistoryItem } from "@/lib/types";
-import { useLocalStorage } from "./useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useSearchHistory = () => {

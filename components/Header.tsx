@@ -1,5 +1,5 @@
-import ThemeToggle from "./ThemeToggle";
-import Logo from "./Logo";
+import ThemeToggle from "@/components/ThemeToggle";
+import Logo from "@/components/Logo";
 import Searchbar from "@/components/Searchbar";
 
 export default function Header() {

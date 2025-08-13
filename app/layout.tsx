@@ -1,10 +1,10 @@
-import "./globals.css";
-import { Lato } from "next/font/google";
-import { Metadata } from "next";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import "@/app/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
+import { Lato } from "next/font/google";
+import { Metadata } from "next";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const lato = Lato({
@@ -14,8 +14,10 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-	title: "Weather App",
-	description: "Get the latest weather data.",
+	title: "Klimate Weather App",
+	description:
+		"Get the latest weather data in your local area. Search other cities weather data.",
+	keywords: ["klimate", "weather", "city"],
 };
 
 export default function RootLayout({
