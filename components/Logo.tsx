@@ -20,7 +20,7 @@ export default function Logo() {
 	const { theme } = useTheme();
 	const isLightTheme = theme === "light";
 
-	if (mounted)
+	if (!mounted)
 		return (
 			<Skeleton className="bg-accent-custom w-[64px] h-[52px] rounded-lg" />
 		);
