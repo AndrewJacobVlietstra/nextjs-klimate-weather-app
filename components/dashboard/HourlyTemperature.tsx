@@ -33,7 +33,7 @@ export default function HourlyTemperature({
 	return (
 		<Card
 			className={cn(
-				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl",
+				"flex-1/2 bg-background/70 hover:bg-background/85 transition-colors backdrop-blur-[10px]",
 				className
 			)}
 		>

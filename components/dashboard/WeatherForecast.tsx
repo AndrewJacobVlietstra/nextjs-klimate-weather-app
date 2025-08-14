@@ -26,7 +26,7 @@ export default function WeatherForecast({
 	return (
 		<Card
 			className={cn(
-				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors",
+				"flex-1/2 bg-background/60 hover:bg-background/75 transition-colors",
 				className
 			)}
 		>
@@ -52,7 +52,7 @@ export default function WeatherForecast({
 								<div className="flex-1 aspect-square max-w-[60px] max-[480px]:hidden">
 									<Image
 										alt={`${forecast.weather.description} image`}
-										className="h-full w-full object-contain"
+										className="h-full w-full object-contain drop-shadow"
 										src={`https://openweathermap.org/img/wn/${formatIcon(
 											forecast.weather.icon
 										)}@4x.png`}

@@ -156,7 +156,7 @@ export default function WeatherDetails({
 	return (
 		<Card
 			className={cn(
-				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors",
+				"flex-1/2 bg-background/60 hover:bg-background/75 transition-colors",
 				className
 			)}
 		>

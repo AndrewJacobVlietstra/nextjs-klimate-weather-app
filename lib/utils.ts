@@ -55,8 +55,8 @@ export const formatIcon = (icon: string) => {
 	if (6 < currentHour && currentHour < 20 && isNightIcon) {
 		return icon.replace("n", "d");
 	}
-	// Else we're currently in night time and if icon is a dayIcon
-	else if (isDayIcon) {
+	// If we're currently in night time and if icon is a dayIcon
+	if ((6 > currentHour || currentHour > 20) && isDayIcon) {
 		return icon.replace("d", "n");
 	}
 

@@ -28,8 +28,8 @@ export default function HomePage() {
 		vertical: 1,
 	});
 
-	const isHorizontalDefault = order?.horizontal === 1;
-	const isVerticalDefault = order?.vertical === 1;
+	const isHorizontalDefault = order.horizontal === 1;
+	const isVerticalDefault = order.vertical === 1;
 
 	const searchParams = useSearchParams();
 	const searchParamsObj = Object.fromEntries(searchParams);
@@ -63,7 +63,7 @@ export default function HomePage() {
 		}
 	};
 
-	// While fetching user Geolocation data show loading skeleton
+	// If getting user current GeoLocation show loading skeleton
 	if (locationLoading) return <DashboardSkeleton />;
 
 	// If location error, show location error alert
@@ -108,14 +108,6 @@ export default function HomePage() {
 			/>
 		);
 
-	// If no data yet show loading skeleton, this avoids showing undefined/null values
-	if (!weatherQuery.data || !forecastQuery.data || !locationQuery.data)
-		return <DashboardSkeleton />;
-
-	const dailyForecasts = formatForecastData(forecastQuery.data);
-
-	const [location] = locationQuery.data;
-
 	return (
 		<div className="space-y-4">
 			{/* Favourite Cities */}
@@ -146,7 +138,12 @@ export default function HomePage() {
 				</div>
 			</div>
 
-			{isFetching ? (
+			{/* If no data yet show loading skeleton, 
+			this avoids showing undefined/null values */}
+			{isFetching ||
+			!weatherQuery.data ||
+			!forecastQuery.data ||
+			!locationQuery.data ? (
 				<DashboardSkeleton />
 			) : (
 				<div className="grid gap-4">
@@ -158,7 +155,7 @@ export default function HomePage() {
 						<CurrentWeather
 							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
 							data={weatherQuery.data}
-							location={location}
+							location={locationQuery.data[0]}
 							unit={unit}
 						/>
 						<HourlyTemperature
@@ -175,13 +172,13 @@ export default function HomePage() {
 					>
 						<WeatherForecast
 							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
-							data={dailyForecasts}
+							data={formatForecastData(forecastQuery.data)}
 							unit={unit}
 						/>
 						<WeatherDetails
 							className={`${isHorizontalDefault ? "order-2" : "order-1"}`}
 							weatherData={weatherQuery.data}
-							forecastData={dailyForecasts}
+							forecastData={formatForecastData(forecastQuery.data)}
 						/>
 					</div>
 				</div>

@@ -29,11 +29,13 @@ export default function CurrentWeather({
 	} = data;
 
 	const maxTempValue = Math.max(feels_like, temp, temp_min, temp_max);
+	const isTempTripleDigits =
+		Math.round(convertUnit(maxTempValue, "F")) >= 100 && unit === "F";
 
 	return (
 		<CustomCard
 			cardClassName={cn(
-				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur",
+				"flex-1/2 bg-background/70 hover:bg-background/85 transition-colors backdrop-blur-[10px]",
 				className
 			)}
 			contentClassName="py-4 pr-0"
@@ -59,12 +61,10 @@ export default function CurrentWeather({
 						</div>
 					</div>
 
-					<div className="flex items-center gap-2">
+					<div className={`flex items-center gap-2`}>
 						<p
 							className={`${
-								convertUnit(maxTempValue, "F") >= 100 && unit === "F"
-									? "text-[3.2rem]"
-									: "text-7xl"
+								isTempTripleDigits ? "text-[3.2rem]" : "text-7xl"
 							} font-bold tracking-tight`}
 							title="Current Temp."
 						>
@@ -116,7 +116,7 @@ export default function CurrentWeather({
 					<div className="relative flex items-center justify-center aspect-square w-full max-w-[200px] ">
 						<Image
 							alt={`${description} image`}
-							className="h-full w-full object-contain"
+							className="h-full w-full object-contain drop-shadow"
 							src={`https://openweathermap.org/img/wn/${formatIcon(
 								icon
 							)}@4x.png`}
