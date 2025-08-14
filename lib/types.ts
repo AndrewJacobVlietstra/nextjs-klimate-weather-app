@@ -122,6 +122,9 @@ export type Direct_Geo_API_Response = {
 	country: string;
 	lat: number;
 	lon: number;
+	local_names?: {
+		[k: string]: string;
+	};
 	name: string;
 	state?: string;
 }[];

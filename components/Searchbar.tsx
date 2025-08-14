@@ -20,6 +20,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
+import { Direct_Geo_API_Response } from "@/lib/types";
 
 type SearchbarProps = {
 	className?: ClassValue;
@@ -43,8 +44,28 @@ export default function Searchbar({}: SearchbarProps) {
 	const [query, setQuery] = useState("");
 	const debouncedQuery = useDebounce(query);
 
-	const { data, isLoading } = useDirectGeocodeQuery(debouncedQuery);
 	const { history, addToHistory, clearHistory } = useSearchHistory();
+	const { data, isLoading } = useDirectGeocodeQuery(debouncedQuery);
+
+	// Remove any duplicate results that may exist in data
+	const uniqueData = data
+		?.map((item) => {
+			// Remove local_names from each item, objects will be easier to compare
+			const { local_names, ...rest } = item;
+			return rest;
+		})
+		.reduce((acc, current) => {
+			const result = acc.find(
+				// Stringify objects to compare,
+				(item) => JSON.stringify(item) == JSON.stringify(current)
+			);
+
+			// if item not in new array add it
+			if (!result) return acc.concat(current);
+
+			// if it is return what we have
+			return acc;
+		}, [] as Direct_Geo_API_Response);
 
 	const handleSelect = (cityData: string) => {
 		setOpen((open) => !open);
@@ -105,7 +126,7 @@ export default function Searchbar({}: SearchbarProps) {
 
 						{data && data.length >= 1 && (
 							<CommandGroup heading="Suggestions">
-								{data.map((location) => (
+								{uniqueData?.map((location) => (
 									<CommandItem
 										className="gap-1.5"
 										key={`${location.lat}${location.lon}${location.name}`}
@@ -132,7 +153,7 @@ export default function Searchbar({}: SearchbarProps) {
 								<CommandSeparator />
 								<CommandGroup className="pb-2">
 									<div className="flex items-center justify-between p-2">
-										<p className=" p-2 text-xs text-muted-foreground">
+										<p className="text-xs text-muted-foreground">
 											Recent Searches
 										</p>
 										<Button
@@ -171,11 +192,11 @@ export default function Searchbar({}: SearchbarProps) {
 							</>
 						)}
 
-						{/* <CommandSeparator /> */}
+						{/* <CommandSeparator />
 
-						{/* <CommandGroup heading="Favourites">
-						<CommandItem>Pizza</CommandItem>
-					</CommandGroup> */}
+						<CommandGroup heading="Favourites">
+							<CommandItem>Pizza</CommandItem>
+						</CommandGroup> */}
 					</CommandList>
 				</CommandDialog>
 			</Command>
