@@ -2,7 +2,7 @@ import CustomCard from "@/components/CustomCard";
 import Image from "next/image";
 import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
 import { ClassValue } from "clsx";
-import { cn, convertUnit, formatTemp } from "@/lib/utils";
+import { cn, convertUnit, formatIcon, formatTemp } from "@/lib/utils";
 import {
 	Current_Weather_API_Response,
 	Reverse_Geo_API_Response,
@@ -33,7 +33,7 @@ export default function CurrentWeather({
 	return (
 		<CustomCard
 			cardClassName={cn(
-				"flex-1/2 bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl",
+				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur",
 				className
 			)}
 			contentClassName="py-4 pr-0"
@@ -117,7 +117,9 @@ export default function CurrentWeather({
 						<Image
 							alt={`${description} image`}
 							className="h-full w-full object-contain"
-							src={`https://openweathermap.org/img/wn/${icon}@4x.png`}
+							src={`https://openweathermap.org/img/wn/${formatIcon(
+								icon
+							)}@4x.png`}
 							width={200}
 							height={200}
 						/>

@@ -11,7 +11,7 @@ export default function Header() {
 						<Logo />
 					</li>
 
-					<li className="flex items-center gap-4">
+					<li className="flex items-center gap-2">
 						<Searchbar />
 						<ThemeToggle />
 					</li>

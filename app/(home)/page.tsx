@@ -9,6 +9,7 @@ import RefreshButton from "@/components/RefreshButton";
 import WeatherDetails from "@/components/dashboard/WeatherDetails";
 import WeatherForecast from "@/components/dashboard/WeatherForecast";
 import UnitButton from "@/components/UnitButton";
+import VerticalOrderButton from "@/components/VerticalOrderButton";
 import { formatForecastData } from "@/lib/utils";
 import { DataOrder, TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -19,7 +20,6 @@ import {
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
-import VerticalOrderButton from "@/components/VerticalOrderButton";
 
 export default function HomePage() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
@@ -123,22 +123,26 @@ export default function HomePage() {
 				<h1 className="text-xl font-bold tracking-tight">
 					{isCoordsInSearchParams ? "" : "My Location"}
 				</h1>
-				<div className="flex items-center gap-4">
-					<HorizontalOrderButton
-						isDefaultOrder={isHorizontalDefault}
-						setOrder={setOrder}
-					/>
-					<VerticalOrderButton
-						isDefaultOrder={isVerticalDefault}
-						setOrder={setOrder}
-					/>
-					<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
-					<RefreshButton
-						buttonClassName={"p-5"}
-						iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
-						clickHandler={handleRefresh}
-						isLoading={isFetching}
-					/>
+				<div className="flex max-[420px]:flex-col items-center gap-4">
+					<div className="flex gap-4">
+						<HorizontalOrderButton
+							isDefaultOrder={isHorizontalDefault}
+							setOrder={setOrder}
+						/>
+						<VerticalOrderButton
+							isDefaultOrder={isVerticalDefault}
+							setOrder={setOrder}
+						/>
+					</div>
+					<div className="flex gap-4">
+						<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
+						<RefreshButton
+							buttonClassName={"p-5"}
+							iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
+							clickHandler={handleRefresh}
+							isLoading={isFetching}
+						/>
+					</div>
 				</div>
 			</div>
 

@@ -29,7 +29,12 @@ export const useSearchHistory = () => {
 
 			// Filter out any currently existing history items that match search item
 			const filteredHistory = history.filter(
-				(item) => !(item.lat === searchItem.lat && item.lon === searchItem.lon)
+				(item) =>
+					!(
+						item.lat === searchItem.lat &&
+						item.lon === searchItem.lon &&
+						item.name === searchItem.name
+					)
 			);
 
 			const newHistory = [newSearch, ...filteredHistory].slice(0, 10);

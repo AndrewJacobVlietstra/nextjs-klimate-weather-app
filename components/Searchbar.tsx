@@ -13,13 +13,13 @@ import {
 	CommandSeparator,
 } from "@/components/ui/command";
 import { Clock3, Loader2, MapPin, Search, XCircle } from "lucide-react";
+import { isStringUndefined } from "@/lib/utils";
+import { format } from "date-fns";
 import { useDirectGeocodeQuery } from "@/hooks/useWeather";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
-import { isStringUndefined } from "@/lib/utils";
-import { format } from "date-fns";
 
 type SearchbarProps = {
 	className?: ClassValue;
@@ -108,7 +108,7 @@ export default function Searchbar({}: SearchbarProps) {
 								{data.map((location) => (
 									<CommandItem
 										className="gap-1.5"
-										key={`${(location.lat, location.lon)}`}
+										key={`${location.lat}${location.lon}${location.name}`}
 										value={`${location.lat}|${location.lon}|${location.name}|${location.state}|${location.country}`}
 										onSelect={handleSelect}
 									>
@@ -148,7 +148,7 @@ export default function Searchbar({}: SearchbarProps) {
 									{history.map((item) => (
 										<CommandItem
 											className="gap-1.5"
-											key={`${(item.lat, item.lon)}-recentSearch`}
+											key={`${item.id}-recentSearchItem`}
 											value={`${item.lat}|${item.lon}|${item.name}|${item.state}|${item.country}|recentSearch`}
 											onSelect={handleSelect}
 										>
