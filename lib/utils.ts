@@ -46,6 +46,23 @@ export const sleep = async (delay = 1000) => {
 export const formatDate = (timestamp: number, formatStr: string) =>
 	format(new Date(timestamp * 1000), formatStr);
 
+export const formatIcon = (icon: string) => {
+	const isDayIcon = icon.includes("d");
+	const isNightIcon = icon.includes("n");
+	const currentHour = new Date().getHours();
+
+	// If we're currently in day time and icon is a nightIcon
+	if (6 < currentHour && currentHour < 20 && isNightIcon) {
+		return icon.replace("n", "d");
+	}
+	// Else we're currently in night time and if icon is a dayIcon
+	else if (isDayIcon) {
+		return icon.replace("d", "n");
+	}
+
+	return icon;
+};
+
 export const formatTemp = (temp: number | string) => `${Math.round(+temp)} °`;
 
 export const formatForecastData = (data: Forecast_Weather_API_Response) => {

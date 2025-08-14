@@ -1,3 +1,8 @@
+import Image from "next/image";
+import { ClassValue } from "clsx";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { average, cn, countryName, formatDate } from "@/lib/utils";
+import { countries, hasFlag } from "country-flag-icons";
 import { Current_Weather_API_Response, DailyForecast } from "@/lib/types";
 import {
 	Clock,
@@ -11,17 +16,15 @@ import {
 	Sunrise,
 	Sunset,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { average, countryName, formatDate } from "@/lib/utils";
-import { countries, hasFlag } from "country-flag-icons";
-import Image from "next/image";
 
 type WeatherDetailsProps = {
+	className?: ClassValue;
 	weatherData: Current_Weather_API_Response;
 	forecastData: DailyForecast[];
 };
 
 export default function WeatherDetails({
+	className,
 	weatherData,
 	forecastData,
 }: WeatherDetailsProps) {
@@ -151,7 +154,12 @@ export default function WeatherDetails({
 	];
 
 	return (
-		<Card className="flex-1/2 bg-background/50 hover:bg-background/65 transition-colors">
+		<Card
+			className={cn(
+				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors",
+				className
+			)}
+		>
 			<CardHeader>
 				<CardTitle>Current Weather Details</CardTitle>
 			</CardHeader>
@@ -160,10 +168,10 @@ export default function WeatherDetails({
 				<div className="grid max-[525px]:grid-cols-1 grid-cols-2 gap-4">
 					{details.map(({ color, icon: DetailIcon, img, title, value }) => (
 						<Card
-							className="flex flex-row justify-center py-7 pr-4 bg-background/50 hover:bg-background/100 transition-colors"
+							className="flex flex-row justify-center py-7 bg-background/50 hover:bg-background/100 transition-colors"
 							key={title}
 						>
-							<CardContent className="flex items-center gap-3 ">
+							<CardContent className="relative flex items-center gap-2 right-1">
 								{DetailIcon ? (
 									<DetailIcon className={`size-6 ${color}`} />
 								) : null}

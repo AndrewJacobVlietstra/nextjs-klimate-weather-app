@@ -1,22 +1,35 @@
+import Image from "next/image";
+import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
+import { ClassValue } from "clsx";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DailyForecast, TemperatureUnits } from "@/lib/types";
 import {
 	capitalizeString,
+	cn,
 	convertUnit,
 	formatDate,
+	formatIcon,
 	formatTemp,
 } from "@/lib/utils";
-import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
-import Image from "next/image";
 
 type WeatherForecastProps = {
+	className?: ClassValue;
 	data: DailyForecast[];
 	unit: TemperatureUnits;
 };
 
-export default function WeatherForecast({ data, unit }: WeatherForecastProps) {
+export default function WeatherForecast({
+	className,
+	data,
+	unit,
+}: WeatherForecastProps) {
 	return (
-		<Card className="flex-1/2 bg-background/50 hover:bg-background/65 transition-colors">
+		<Card
+			className={cn(
+				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors",
+				className
+			)}
+		>
 			<CardHeader>
 				<CardTitle>5-Day Forecast</CardTitle>
 			</CardHeader>
@@ -40,7 +53,9 @@ export default function WeatherForecast({ data, unit }: WeatherForecastProps) {
 									<Image
 										alt={`${forecast.weather.description} image`}
 										className="h-full w-full object-contain"
-										src={`https://openweathermap.org/img/wn/${forecast.weather.icon}@4x.png`}
+										src={`https://openweathermap.org/img/wn/${formatIcon(
+											forecast.weather.icon
+										)}@4x.png`}
 										width={60}
 										height={60}
 										title={`${capitalizeString(forecast.weather.description)}`}

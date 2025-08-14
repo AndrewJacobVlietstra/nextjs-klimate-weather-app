@@ -3,13 +3,14 @@
 import CustomAlert from "@/components/CustomAlert";
 import CurrentWeather from "@/components/dashboard/CurrentWeather";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import HorizontalOrderButton from "@/components/HorizontalOrderButton";
 import HourlyTemperature from "@/components/dashboard/HourlyTemperature";
 import RefreshButton from "@/components/RefreshButton";
 import WeatherDetails from "@/components/dashboard/WeatherDetails";
 import WeatherForecast from "@/components/dashboard/WeatherForecast";
 import UnitButton from "@/components/UnitButton";
 import { formatForecastData } from "@/lib/utils";
-import { TemperatureUnits } from "@/lib/types";
+import { DataOrder, TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useSearchParams } from "next/navigation";
@@ -18,9 +19,17 @@ import {
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
+import VerticalOrderButton from "@/components/VerticalOrderButton";
 
 export default function HomePage() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
+	const [order, setOrder] = useLocalStorage<DataOrder>("order", {
+		horizontal: 1,
+		vertical: 1,
+	});
+
+	const isHorizontalDefault = order?.horizontal === 1;
+	const isVerticalDefault = order?.vertical === 1;
 
 	const searchParams = useSearchParams();
 	const searchParamsObj = Object.fromEntries(searchParams);
@@ -115,6 +124,14 @@ export default function HomePage() {
 					{isCoordsInSearchParams ? "" : "My Location"}
 				</h1>
 				<div className="flex items-center gap-4">
+					<HorizontalOrderButton
+						isDefaultOrder={isHorizontalDefault}
+						setOrder={setOrder}
+					/>
+					<VerticalOrderButton
+						isDefaultOrder={isVerticalDefault}
+						setOrder={setOrder}
+					/>
 					<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
 					<RefreshButton
 						buttonClassName={"p-5"}
@@ -129,18 +146,36 @@ export default function HomePage() {
 				<DashboardSkeleton />
 			) : (
 				<div className="grid gap-4">
-					<div className="flex flex-col lg:flex-row gap-4">
+					<div
+						className={`${
+							isVerticalDefault ? "order-1" : "order-2"
+						} flex flex-col lg:flex-row gap-4`}
+					>
 						<CurrentWeather
+							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
 							data={weatherQuery.data}
 							location={location}
 							unit={unit}
 						/>
-						<HourlyTemperature data={forecastQuery.data} unit={unit} />
+						<HourlyTemperature
+							className={`${isHorizontalDefault ? "order-2" : "order-1"}`}
+							data={forecastQuery.data}
+							unit={unit}
+						/>
 					</div>
 
-					<div className="flex flex-col lg:flex-row gap-4">
-						<WeatherForecast data={dailyForecasts} unit={unit} />
+					<div
+						className={`${
+							isVerticalDefault ? "order-2" : "order-1"
+						} flex flex-col lg:flex-row gap-4`}
+					>
+						<WeatherForecast
+							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
+							data={dailyForecasts}
+							unit={unit}
+						/>
 						<WeatherDetails
+							className={`${isHorizontalDefault ? "order-2" : "order-1"}`}
 							weatherData={weatherQuery.data}
 							forecastData={dailyForecasts}
 						/>

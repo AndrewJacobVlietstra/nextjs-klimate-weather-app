@@ -25,7 +25,7 @@ export default function RefreshButton({
 			title="Refresh Data"
 			variant="outline"
 		>
-			<RefreshCw className={cn("h-4 w-4", iconClassName)} />
+			<RefreshCw className={cn("", iconClassName)} />
 		</Button>
 	);
 }

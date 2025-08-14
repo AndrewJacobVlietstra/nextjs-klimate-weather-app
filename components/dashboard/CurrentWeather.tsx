@@ -1,20 +1,23 @@
+import CustomCard from "@/components/CustomCard";
+import Image from "next/image";
 import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
-import { convertUnit, formatTemp } from "@/lib/utils";
+import { ClassValue } from "clsx";
+import { cn, convertUnit, formatTemp } from "@/lib/utils";
 import {
 	Current_Weather_API_Response,
 	Reverse_Geo_API_Response,
 	TemperatureUnits,
 } from "@/lib/types";
-import CustomCard from "@/components/CustomCard";
-import Image from "next/image";
 
 type CurrentWeatherProps = {
+	className?: ClassValue;
 	data: Current_Weather_API_Response;
 	location?: Reverse_Geo_API_Response[0];
 	unit: TemperatureUnits;
 };
 
 export default function CurrentWeather({
+	className,
 	data,
 	location,
 	unit,
@@ -29,7 +32,10 @@ export default function CurrentWeather({
 
 	return (
 		<CustomCard
-			cardClassName="flex-1/2 bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl"
+			cardClassName={cn(
+				"flex-1/2 bg-background/40 hover:bg-background/65 transition-colors backdrop-blur-2xl",
+				className
+			)}
 			contentClassName="py-4 pr-0"
 		>
 			<div className="grid md:grid-cols-2 justify-items-center">

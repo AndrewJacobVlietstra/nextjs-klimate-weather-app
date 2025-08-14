@@ -1,5 +1,7 @@
-import { Forecast_Weather_API_Response, TemperatureUnits } from "@/lib/types";
+import { ClassValue } from "clsx";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn, convertUnit, formatDate, formatTemp } from "@/lib/utils";
+import { Forecast_Weather_API_Response, TemperatureUnits } from "@/lib/types";
 import {
 	Line,
 	LineChart,
@@ -8,14 +10,15 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { convertUnit, formatDate, formatTemp } from "@/lib/utils";
 
 type HourlyTemperatureProps = {
+	className?: ClassValue;
 	data: Forecast_Weather_API_Response;
 	unit: TemperatureUnits;
 };
 
 export default function HourlyTemperature({
+	className,
 	data,
 	unit,
 }: HourlyTemperatureProps) {
@@ -28,7 +31,12 @@ export default function HourlyTemperature({
 		}));
 
 	return (
-		<Card className="flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl">
+		<Card
+			className={cn(
+				"flex-1/2 bg-background/50 hover:bg-background/65 transition-colors backdrop-blur-2xl",
+				className
+			)}
+		>
 			<CardHeader>
 				<CardTitle>Today&apos;s Temperature</CardTitle>
 			</CardHeader>
@@ -37,6 +45,7 @@ export default function HourlyTemperature({
 					<ResponsiveContainer width={"100%"} height={"100%"}>
 						<LineChart data={chartData}>
 							<XAxis
+								domain={["auto"]}
 								dataKey={"time"}
 								stroke="#888"
 								fontSize={12}

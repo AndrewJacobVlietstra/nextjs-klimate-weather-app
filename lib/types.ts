@@ -7,6 +7,11 @@ export type Coordinates = {
 	lon: number;
 };
 
+export type DataOrder = {
+	horizontal: 1 | 2;
+	vertical: 1 | 2;
+};
+
 export type SearchHistoryItem = {
 	country: string;
 	id: string;

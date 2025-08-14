@@ -28,7 +28,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${lato.className} bg-gradient-to-br from-background to-muted antialiased`}
+				className={`${lato.className} bg-gradient-to-b from-custom-background to-muted antialiased`}
 			>
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
