@@ -51,6 +51,7 @@ export default function Searchbar({}: SearchbarProps) {
 	const uniqueData = data
 		?.map((item) => {
 			// Remove local_names from each item, objects will be easier to compare
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { local_names, ...rest } = item;
 			return rest;
 		})

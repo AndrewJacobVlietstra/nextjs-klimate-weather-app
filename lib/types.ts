@@ -23,6 +23,16 @@ export type SearchHistoryItem = {
 	query: string;
 };
 
+export type FavouriteCity = {
+	id: string;
+	name: string;
+	lat: number;
+	lon: number;
+	country: string;
+	state?: string;
+	addedAt: number;
+};
+
 export type DailyForecast = {
 	date: number;
 	humidity: number;

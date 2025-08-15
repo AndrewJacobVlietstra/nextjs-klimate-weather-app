@@ -52,7 +52,7 @@ export default function HomePage() {
 		forecastQuery.isFetching ||
 		locationQuery.isFetching;
 
-	let handleRefresh = async () => {
+	const handleRefresh = async () => {
 		if (!isCoordsInSearchParams) getCurrentLocation();
 
 		if (coordinates) {
