@@ -2,19 +2,20 @@ import Image from "next/image";
 import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
 import { ClassValue } from "clsx";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DailyForecast, TemperatureUnits } from "@/lib/types";
+import { Forecast_Weather_API_Response, TemperatureUnits } from "@/lib/types";
 import {
 	capitalizeString,
 	cn,
 	convertUnit,
 	formatDate,
+	formatForecastData,
 	formatIcon,
 	formatTemp,
 } from "@/lib/utils";
 
 type WeatherForecastProps = {
 	className?: ClassValue;
-	data: DailyForecast[];
+	data: Forecast_Weather_API_Response;
 	unit: TemperatureUnits;
 };
 
@@ -23,10 +24,12 @@ export default function WeatherForecast({
 	data,
 	unit,
 }: WeatherForecastProps) {
+	const dailyForecasts = formatForecastData(data);
+
 	return (
 		<Card
 			className={cn(
-				"flex-1/2 bg-background/60 hover:bg-background/75 transition-colors",
+				"flex-1/2 bg-background/75 hover:bg-background/80 transition-colors",
 				className
 			)}
 		>
@@ -35,10 +38,10 @@ export default function WeatherForecast({
 			</CardHeader>
 			<CardContent>
 				<div className="grid gap-4.5">
-					{data.map((forecast) => (
-						<div
+					{dailyForecasts.map((forecast) => (
+						<Card
 							key={forecast.date}
-							className="grid grid-cols-[1.62fr_1.3fr_1.1fr] gap-4 items-center rounded-lg border p-4 bg-background/50 hover:bg-background/100 transition-colors"
+							className="grid grid-cols-[1.62fr_1.3fr_1.1fr] gap-4 items-center rounded-lg border p-4 bg-background/85 hover:bg-background/100 transition-colors"
 						>
 							<div className="flex items-center justify-around">
 								<div className="flex-1">
@@ -99,7 +102,7 @@ export default function WeatherForecast({
 									</span>
 								</span>
 							</div>
-						</div>
+						</Card>
 					))}
 				</div>
 			</CardContent>

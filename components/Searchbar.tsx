@@ -60,10 +60,10 @@ export default function Searchbar({}: SearchbarProps) {
 				(item) => JSON.stringify(item) == JSON.stringify(current)
 			);
 
-			// if item not in new array add it
+			// if current item not in accumulator array add it
 			if (!result) return acc.concat(current);
 
-			// if it is return what we have
+			// else current item already in accumulator, return what we have
 			return acc;
 		}, [] as Direct_Geo_API_Response);
 

@@ -1,9 +1,18 @@
 import Image from "next/image";
 import { ClassValue } from "clsx";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { average, cn, countryName, formatDate } from "@/lib/utils";
 import { countries, hasFlag } from "country-flag-icons";
-import { Current_Weather_API_Response, DailyForecast } from "@/lib/types";
+import {
+	Current_Weather_API_Response,
+	Forecast_Weather_API_Response,
+} from "@/lib/types";
+import {
+	average,
+	cn,
+	formatDate,
+	formatForecastData,
+	getCountryName,
+} from "@/lib/utils";
 import {
 	Clock,
 	Cloud,
@@ -20,7 +29,7 @@ import {
 type WeatherDetailsProps = {
 	className?: ClassValue;
 	weatherData: Current_Weather_API_Response;
-	forecastData: DailyForecast[];
+	forecastData: Forecast_Weather_API_Response;
 };
 
 export default function WeatherDetails({
@@ -37,10 +46,14 @@ export default function WeatherDetails({
 		visibility,
 	} = weatherData;
 
-	const { cloudiness, rain_chance } = forecastData[0];
+	const dailyForecasts = formatForecastData(forecastData);
+
+	const { cloudiness, rain_chance } = dailyForecasts[0];
 
 	const avgCloudiness = average(cloudiness);
 	const avgRainChance = average(rain_chance) * 100;
+
+	const countryName = getCountryName(country);
 
 	const getWindDirection = (deg: number, abbreviated?: boolean) => {
 		const directionsAbbr = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -149,14 +162,26 @@ export default function WeatherDetails({
 			title: "Country",
 			img: hasFlag(country) && countries.includes(country),
 			icon: !hasFlag(country) && !countries.includes(country) && Globe,
-			value: countryName.of(country),
+			value: (
+				<>
+					<span className="block">
+						{countryName?.split(" ")[0]} {countryName?.split(" ")[1]}
+					</span>
+					<span className="block">
+						{countryName?.split(" ")[2]} {countryName?.split(" ")[3]}
+					</span>
+					<span className="block">
+						{countryName?.split(" ")[4]} {countryName?.split(" ")[5]}
+					</span>
+				</>
+			),
 		},
 	];
 
 	return (
 		<Card
 			className={cn(
-				"flex-1/2 bg-background/60 hover:bg-background/75 transition-colors",
+				"flex-1/2 bg-background/75 hover:bg-background/80 transition-colors",
 				className
 			)}
 		>
@@ -168,18 +193,18 @@ export default function WeatherDetails({
 				<div className="grid max-[525px]:grid-cols-1 grid-cols-2 gap-4">
 					{details.map(({ color, icon: DetailIcon, img, title, value }) => (
 						<Card
-							className="flex flex-row justify-center py-7 bg-background/50 hover:bg-background/100 transition-colors"
+							className="flex flex-row justify-center py-7 bg-background/85 hover:bg-background/100 transition-colors"
 							key={title}
 						>
-							<CardContent className="relative flex items-center gap-2 right-1">
+							<CardContent className="relative flex items-center justify-center gap-2 right-1">
 								{DetailIcon ? (
 									<DetailIcon className={`size-6 ${color}`} />
 								) : null}
 
 								{img ? (
 									<Image
-										alt={`${countryName.of(country)} Flag`}
-										title={`${countryName.of(country)} Flag`}
+										alt={`${countryName} Flag`}
+										title={`${countryName} Flag`}
 										src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
 										width={26}
 										height={26}

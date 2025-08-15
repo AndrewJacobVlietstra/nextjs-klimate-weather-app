@@ -26,7 +26,7 @@ export default function Logo() {
 		);
 
 	return (
-		<Link href={"/"}>
+		<Link href={"/"} title="Click For Your Location">
 			<Image
 				className="min-w-full hover:brightness-125 transition-all"
 				src={isLightTheme ? "/logo2.png" : "/logo.png"}

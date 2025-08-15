@@ -30,6 +30,8 @@ export const capitalizeString = (input: string) => {
 };
 
 export const countryName = new Intl.DisplayNames(["en"], { type: "region" });
+export const getCountryName = (countryCode: string) =>
+	countryName.of(countryCode);
 
 // Temperature values from API are celsius by default with current config settings
 export const convertUnit = (temp: number | string, unit: TemperatureUnits) => {

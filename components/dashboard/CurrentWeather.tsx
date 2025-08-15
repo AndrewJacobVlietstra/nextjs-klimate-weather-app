@@ -2,9 +2,16 @@ import CustomCard from "@/components/CustomCard";
 import Image from "next/image";
 import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
 import { ClassValue } from "clsx";
-import { cn, convertUnit, formatIcon, formatTemp } from "@/lib/utils";
+import {
+	cn,
+	convertUnit,
+	formatForecastData,
+	formatIcon,
+	formatTemp,
+} from "@/lib/utils";
 import {
 	Current_Weather_API_Response,
+	Forecast_Weather_API_Response,
 	Reverse_Geo_API_Response,
 	TemperatureUnits,
 } from "@/lib/types";
@@ -12,6 +19,7 @@ import {
 type CurrentWeatherProps = {
 	className?: ClassValue;
 	data: Current_Weather_API_Response;
+	forecastData: Forecast_Weather_API_Response;
 	location?: Reverse_Geo_API_Response[0];
 	unit: TemperatureUnits;
 };
@@ -19,14 +27,19 @@ type CurrentWeatherProps = {
 export default function CurrentWeather({
 	className,
 	data,
+	forecastData,
 	location,
 	unit,
 }: CurrentWeatherProps) {
 	const {
-		main: { feels_like, temp, temp_min, temp_max, humidity },
+		main: { feels_like, temp, humidity },
 		weather: [{ description, icon }],
 		wind: { speed },
 	} = data;
+
+	const dailyForecasts = formatForecastData(forecastData);
+	const currentDailyForecast = dailyForecasts[0];
+	const { temp_min, temp_max } = currentDailyForecast;
 
 	const maxTempValue = Math.max(feels_like, temp, temp_min, temp_max);
 	const isTempTripleDigits =
@@ -35,12 +48,12 @@ export default function CurrentWeather({
 	return (
 		<CustomCard
 			cardClassName={cn(
-				"flex-1/2 bg-background/70 hover:bg-background/85 transition-colors backdrop-blur-[10px]",
+				"flex-1/2 bg-background/75 hover:bg-background/90 transition-colors backdrop-blur-[10px]",
 				className
 			)}
 			contentClassName="py-4 pr-0"
 		>
-			<div className="grid md:grid-cols-2 justify-items-center">
+			<div className="grid sm:grid-cols-2 justify-items-center">
 				<div className="space-y-4">
 					<div className="space-y-2">
 						<div className="flex flex-col gap-1">
@@ -61,7 +74,7 @@ export default function CurrentWeather({
 						</div>
 					</div>
 
-					<div className={`flex items-center gap-2`}>
+					<div className={`flex items-center gap-2 max-[300px]:flex-col`}>
 						<p
 							className={`${
 								isTempTripleDigits ? "text-[3.2rem]" : "text-7xl"
@@ -94,7 +107,7 @@ export default function CurrentWeather({
 						</div>
 					</div>
 
-					<div className="grid grid-cols-2 gap-4">
+					<div className="grid grid-cols-2 gap-4 max-[300px]:grid-cols-1">
 						<div className="flex items-center gap-2">
 							<Droplets className="size-5 text-blue-400" />
 							<div className="space-y-0.5">
@@ -112,7 +125,7 @@ export default function CurrentWeather({
 					</div>
 				</div>
 
-				<div className="flex flex-col items-center justify-center">
+				<div className="flex flex-col items-center justify-center max-[300px]:hidden">
 					<div className="relative flex items-center justify-center aspect-square w-full max-w-[200px] ">
 						<Image
 							alt={`${description} image`}

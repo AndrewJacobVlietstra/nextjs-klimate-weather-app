@@ -10,7 +10,6 @@ import WeatherDetails from "@/components/dashboard/WeatherDetails";
 import WeatherForecast from "@/components/dashboard/WeatherForecast";
 import UnitButton from "@/components/UnitButton";
 import VerticalOrderButton from "@/components/VerticalOrderButton";
-import { formatForecastData } from "@/lib/utils";
 import { DataOrder, TemperatureUnits } from "@/lib/types";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -28,8 +27,8 @@ export default function HomePage() {
 		vertical: 1,
 	});
 
-	const isHorizontalDefault = order.horizontal === 1;
-	const isVerticalDefault = order.vertical === 1;
+	const isHorizontalDefault = order?.horizontal === 1;
+	const isVerticalDefault = order?.vertical === 1;
 
 	const searchParams = useSearchParams();
 	const searchParamsObj = Object.fromEntries(searchParams);
@@ -53,7 +52,7 @@ export default function HomePage() {
 		forecastQuery.isFetching ||
 		locationQuery.isFetching;
 
-	const handleRefresh = async () => {
+	let handleRefresh = async () => {
 		if (!isCoordsInSearchParams) getCurrentLocation();
 
 		if (coordinates) {
@@ -113,7 +112,7 @@ export default function HomePage() {
 			{/* Favourite Cities */}
 			<div className="flex items-center justify-between">
 				<h1 className="text-xl font-bold tracking-tight">
-					{isCoordsInSearchParams ? "" : "My Location"}
+					{isCoordsInSearchParams ? "" : "Your Location"}
 				</h1>
 				<div className="flex max-[420px]:flex-col items-center gap-4">
 					<div className="flex gap-4">
@@ -130,9 +129,9 @@ export default function HomePage() {
 						<UnitButton className="p-5" setUnit={setUnit} unit={unit} />
 						<RefreshButton
 							buttonClassName={"p-5"}
-							iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
 							clickHandler={handleRefresh}
 							isLoading={isFetching}
+							iconClassName={`size-5 ${isFetching ? "animate-spin" : null}`}
 						/>
 					</div>
 				</div>
@@ -155,6 +154,7 @@ export default function HomePage() {
 						<CurrentWeather
 							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
 							data={weatherQuery.data}
+							forecastData={forecastQuery.data}
 							location={locationQuery.data[0]}
 							unit={unit}
 						/>
@@ -172,13 +172,13 @@ export default function HomePage() {
 					>
 						<WeatherForecast
 							className={`${isHorizontalDefault ? "order-1" : "order-2"}`}
-							data={formatForecastData(forecastQuery.data)}
+							data={forecastQuery.data}
 							unit={unit}
 						/>
 						<WeatherDetails
 							className={`${isHorizontalDefault ? "order-2" : "order-1"}`}
 							weatherData={weatherQuery.data}
-							forecastData={formatForecastData(forecastQuery.data)}
+							forecastData={forecastQuery.data}
 						/>
 					</div>
 				</div>
