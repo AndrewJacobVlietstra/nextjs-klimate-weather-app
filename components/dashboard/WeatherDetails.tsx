@@ -205,7 +205,8 @@ export default function WeatherDetails({
 									<Image
 										alt={`${countryName} Flag`}
 										title={`${countryName} Flag`}
-										src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
+										className="max-w-[26px] h-auto object-contain"
+										src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
 										width={26}
 										height={26}
 									/>
