@@ -7,6 +7,7 @@ import {
 	Forecast_Weather_API_Response,
 	TemperatureUnits,
 } from "@/lib/types";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
 const {
 	openweather: { privateKey },
@@ -32,6 +33,15 @@ export const capitalizeString = (input: string) => {
 export const countryName = new Intl.DisplayNames(["en"], { type: "region" });
 export const getCountryName = (countryCode: string) =>
 	countryName.of(countryCode);
+
+export const isCoordsInParams = (searchParams: ReadonlyURLSearchParams) => {
+	const searchParamsObj = Object.fromEntries(searchParams);
+	const searchParamsKeys = Object.keys(searchParamsObj);
+	const isCoordsInSearchParams =
+		searchParamsKeys.includes("lat") && searchParamsKeys.includes("lon");
+
+	return isCoordsInSearchParams;
+};
 
 // Temperature values from API are celsius by default with current config settings
 export const convertUnit = (temp: number | string, unit: TemperatureUnits) => {

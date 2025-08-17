@@ -1,31 +1,29 @@
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
-import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { Star } from "lucide-react";
 
-type RefreshButtonProps = {
-	buttonClassName?: ClassValue;
-	iconClassName?: ClassValue;
+type FavouriteButtonProps = {
+	className?: ClassValue;
 	clickHandler: () => void;
-	isLoading: boolean;
+	isLoading?: boolean;
 };
 
-export default function RefreshButton({
-	buttonClassName,
-	iconClassName,
+export default function FavouriteButton({
+	className,
 	clickHandler,
 	isLoading,
-}: RefreshButtonProps) {
+}: FavouriteButtonProps) {
 	return (
 		<Button
-			className={cn("", buttonClassName)}
+			className={cn("", className)}
 			onClick={clickHandler}
-			disabled={isLoading}
+			disabled={isLoading ?? false}
 			size="icon"
-			title="Refresh Data"
+			title="Add To Favourites"
 			variant="outline"
 		>
-			<RefreshCw className={cn("", iconClassName)} />
+			<Star className={cn("size-4")} />
 		</Button>
 	);
 }

@@ -21,10 +21,12 @@ export const useFavourite = () => {
 		mutationFn: async (
 			favouriteCity: Omit<FavouriteCity, "id" | "addedAt">
 		) => {
+			const { lat, lon, name, country } = favouriteCity;
+
 			// Create new favourite city item
 			const newFavourite: FavouriteCity = {
 				...favouriteCity,
-				id: `${favouriteCity.lat}-${favouriteCity.lon}-${Date.now()}`,
+				id: `${lat}-${lon}-${name}-${country}`,
 				addedAt: Date.now(),
 			};
 

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { GeolocationState } from "@/lib/types";
 import { ReadonlyURLSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const useGeolocation = (
 	searchParams: ReadonlyURLSearchParams,

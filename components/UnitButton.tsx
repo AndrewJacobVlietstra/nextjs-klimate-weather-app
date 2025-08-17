@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import { Button } from "@/components/ui/button";
