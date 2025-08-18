@@ -7,6 +7,7 @@ import UnitButton from "@/components/UnitButton";
 import VerticalOrderButton from "@/components/VerticalOrderButton";
 import CurrentWeather from "@/components/dashboard/CurrentWeather";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import FavouriteButton from "@/components/FavouriteButton";
 import HourlyTemperature from "@/components/dashboard/HourlyTemperature";
 import WeatherDetails from "@/components/dashboard/WeatherDetails";
 import WeatherForecast from "@/components/dashboard/WeatherForecast";
@@ -20,8 +21,6 @@ import {
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
-import FavouriteButton from "../FavouriteButton";
-// import FavouritesPopover from "../FavouritesPopover";
 
 export default function Dashboard() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
