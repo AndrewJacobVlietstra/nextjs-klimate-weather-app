@@ -20,6 +20,8 @@ import {
 	useForecastWeatherQuery,
 	useReverseGeocodeQuery,
 } from "@/hooks/useWeather";
+import FavouriteButton from "../FavouriteButton";
+// import FavouritesPopover from "../FavouritesPopover";
 
 export default function Dashboard() {
 	const [unit, setUnit] = useLocalStorage<TemperatureUnits>("unit", "C");
@@ -114,6 +116,9 @@ export default function Dashboard() {
 				</h1>
 				<div className="flex max-[420px]:flex-col items-center gap-4">
 					<div className="flex gap-4">
+						{isCoordsInSearchParams && (
+							<FavouriteButton searchParams={searchParams} />
+						)}
 						<HorizontalOrderButton
 							isDefaultOrder={isHorizontalDefault}
 							setOrder={setOrder}

@@ -10,23 +10,22 @@ export const useFavourite = () => {
 
 	const queryClient = useQueryClient();
 
-	const favouritesQuery = useQuery({
+	const favouriteQuery = useQuery({
 		queryKey: ["favouriteCities"],
 		queryFn: () => favourites,
 		initialData: favourites,
-		staleTime: Infinity,
 	});
 
 	const addToFavourites = useMutation({
 		mutationFn: async (
 			favouriteCity: Omit<FavouriteCity, "id" | "addedAt">
 		) => {
-			const { lat, lon, name, country } = favouriteCity;
+			const { lat, lon, name, state, country } = favouriteCity;
 
 			// Create new favourite city item
 			const newFavourite: FavouriteCity = {
 				...favouriteCity,
-				id: `${lat}-${lon}-${name}-${country}`,
+				id: `${lat}|${lon}|${name}|${state ? `${state}|` : ""}${country}`,
 				addedAt: Date.now(),
 			};
 
@@ -38,42 +37,35 @@ export const useFavourite = () => {
 			// If fav already exists return current favs, make no changes
 			if (favouriteExists) return favourites;
 
-			// Else it does not exist, add it to current favourites
-			const newFavourites = [newFavourite, ...favourites].slice(0, 10);
+			const newFavourites = [newFavourite, ...favourites];
 
-			setFavourites(newFavourites);
+			setFavourites([...newFavourites]);
 			return newFavourites;
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["favouriteCities"],
-			});
+		onSuccess: (newFavourites) => {
+			queryClient.setQueryData(["favouriteCities"], newFavourites);
 		},
 	});
 
 	const removeFavourite = useMutation({
-		mutationFn: async (cityId: string) => {
+		mutationFn: async (cityID: string) => {
 			const newFavourites = favourites.filter(
-				(favourite) => favourite.id !== cityId
+				(favourite) => favourite.id !== cityID
 			);
 
-			setFavourites(newFavourites);
+			setFavourites([...newFavourites]);
 			return newFavourites;
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["favouriteCities"],
-			});
+		onSuccess: (newFavourites) => {
+			queryClient.setQueryData(["favouriteCities"], newFavourites);
 		},
 	});
 
 	return {
-		favourites: favouritesQuery.data ?? [],
+		favourites: favouriteQuery.data ?? [],
 		addToFavourites,
 		removeFavourite,
-		isFavourite: (lat: number, lon: number) =>
-			favourites.some(
-				(favourite) => favourite.lat === lat && favourite.lon === lon
-			),
+		isFavourite: (cityID: string) =>
+			favourites.some((favourite) => favourite.id === cityID),
 	};
 };

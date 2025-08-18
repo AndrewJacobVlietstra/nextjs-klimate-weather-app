@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { Lato } from "next/font/google";
 import { Metadata } from "next";
-import { Suspense } from "react";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -36,7 +35,7 @@ export default function RootLayout({
 						<Header />
 						<main className="min-h-[calc(100vh-5.3rem-5.6rem)]">
 							<div className="container mx-auto px-4 py-8 overflow-auto">
-								<Suspense>{children}</Suspense>
+								{children}
 							</div>
 						</main>
 						<Footer />

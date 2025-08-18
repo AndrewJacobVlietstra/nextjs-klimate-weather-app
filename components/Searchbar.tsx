@@ -12,15 +12,16 @@ import {
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
-import { Clock3, Loader2, MapPin, Search, XCircle } from "lucide-react";
-import { isStringUndefined } from "@/lib/utils";
+import { Clock3, Loader2, MapPin, Search, Star, XCircle } from "lucide-react";
+import { Direct_Geo_API_Response } from "@/lib/types";
 import { format } from "date-fns";
+import { isStringUndefined } from "@/lib/utils";
 import { useDirectGeocodeQuery } from "@/hooks/useWeather";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
-import { Direct_Geo_API_Response } from "@/lib/types";
+import { useFavourite } from "@/hooks/useFavourite";
 
 type SearchbarProps = {
 	className?: ClassValue;
@@ -44,6 +45,7 @@ export default function Searchbar({}: SearchbarProps) {
 	const [query, setQuery] = useState("");
 	const debouncedQuery = useDebounce(query);
 
+	const { favourites } = useFavourite();
 	const { history, addToHistory, clearHistory } = useSearchHistory();
 	const { data, isLoading } = useDirectGeocodeQuery(debouncedQuery);
 
@@ -84,7 +86,11 @@ export default function Searchbar({}: SearchbarProps) {
 			query,
 		});
 
-		router.push(`/?city=${name}&lat=${lat}&lon=${lon}`);
+		router.push(
+			`/?lat=${lat}&lon=${lon}&city=${name}&${
+				parsedState ? `state=${state}&` : ""
+			}country=${country}`
+		);
 	};
 
 	return (
@@ -126,28 +132,58 @@ export default function Searchbar({}: SearchbarProps) {
 						)}
 
 						{data && data.length >= 1 && (
-							<CommandGroup heading="Suggestions">
-								{uniqueData?.map((location) => (
+							<>
+								<CommandSeparator />
+								<CommandGroup heading="Suggestions">
+									{uniqueData?.map((location) => (
+										<CommandItem
+											className="gap-1.5"
+											key={`${location.lat}${location.lon}${location.name}`}
+											value={`${location.lat}|${location.lon}|${location.name}|${location.state}|${location.country}`}
+											onSelect={handleSelect}
+										>
+											<MapPin className="size-4 text-muted-foreground" />
+											<span>{location.name},</span>
+											{location.state && (
+												<span className="text-sm text-muted-foreground">
+													{location.state},
+												</span>
+											)}
+											<span className="text-sm text-muted-foreground">
+												{location.country}
+											</span>
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</>
+						)}
+
+						{favourites.length > 0 ? (
+							<CommandGroup heading="Favourites">
+								{favourites.map(({ lat, lon, name, state, country }) => (
 									<CommandItem
 										className="gap-1.5"
-										key={`${location.lat}${location.lon}${location.name}`}
-										value={`${location.lat}|${location.lon}|${location.name}|${location.state}|${location.country}`}
+										key={`${lat}|${lon}|${name}|${
+											state ? `${state}|` : ""
+										}${country}`}
+										value={`${lat}|${lon}|${name}|${state}|${country}`}
 										onSelect={handleSelect}
 									>
-										<MapPin className="size-4 text-muted-foreground" />
-										<span>{location.name},</span>
-										{location.state && (
+										<Star className="size-4 fill-amber-300" />
+
+										<span>{name},</span>
+										{state && (
 											<span className="text-sm text-muted-foreground">
-												{location.state},
+												{state},
 											</span>
 										)}
 										<span className="text-sm text-muted-foreground">
-											{location.country}
+											{country}
 										</span>
 									</CommandItem>
 								))}
 							</CommandGroup>
-						)}
+						) : null}
 
 						{history.length >= 1 && (
 							<>
@@ -192,12 +228,6 @@ export default function Searchbar({}: SearchbarProps) {
 								</CommandGroup>
 							</>
 						)}
-
-						{/* <CommandSeparator />
-
-						<CommandGroup heading="Favourites">
-							<CommandItem>Pizza</CommandItem>
-						</CommandGroup> */}
 					</CommandList>
 				</CommandDialog>
 			</Command>
